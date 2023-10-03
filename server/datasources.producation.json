@@ -4,7 +4,7 @@
     "connector": "memory"
   },
   "mongoDB": {
-    "url": "mongodb+srv://marbiz:E87Ry12VGVno7Hrk@marbiz.cnpt66c.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp",
+    "url": "mongodb://trading:trading1234@65.0.179.78:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1",
     "name": "mongoDB",
     "useNewUrlParser": true,
     "connector": "mongodb"

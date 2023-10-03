@@ -4,7 +4,7 @@
     "connector": "memory"
   },
   "mongoDB": {
-    "url": "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1",
+    "url": "mongodb://trading:trading1234@65.0.179.78:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1",
     "name": "mongoDB",
     "useNewUrlParser": true,
     "connector": "mongodb"
