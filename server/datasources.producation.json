@@ -1,0 +1,19 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongoDB": {
+    "url": "mongodb+srv://marbiz:E87Ry12VGVno7Hrk@marbiz.cnpt66c.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp",
+    "name": "mongoDB",
+    "useNewUrlParser": true,
+    "connector": "mongodb"
+  },
+  "awsStorage": {
+    "name": "awsStorage",
+    "connector": "loopback-component-storage",
+    "provider": "amazon",
+    "key": "",
+    "keyId": ""
+  }
+}

@@ -1,0 +1,328 @@
+{
+  "name": "TdUser",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "lastLogin": {
+      "type": "date",
+      "required": false
+    },
+    "phoneVerified": {
+      "type": "boolean",
+      "default": false
+    },
+    "isTermsAgreed": {
+      "type": "boolean",
+      "default": false
+    },
+    "contactName": {
+      "type": "string",
+      "required": true
+    },
+    "userType": {
+      "type": "string",
+      "required": true
+    },
+    "city": {
+      "type": "string"
+    },
+    "state": {
+      "type": "string"
+    },
+    "country": {
+      "type": "string",
+      "default": "IN"
+    },
+    "referrald": {
+      "type": "string"
+    },
+    "verificationCode": {
+      "type": "string"
+    },
+    "codeCreatedAt": {
+      "type": "date"
+    },
+    "status": {
+      "type": "string",
+      "default": "I"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "property": "sendOTP",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "property": "resetUserPassword",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "property": "verifyOTP",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "property": "generateAccessToken",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {
+    "sendOTP": {
+      "accepts": [
+        {
+          "arg": "handle",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "mode",
+          "type": "string",
+          "description": "Use phone or email",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "response",
+          "type": "string"
+        }
+      ]
+    },
+    "resetUserPassword": {
+      "accepts": [
+        {
+          "arg": "handle",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "otp",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "newPassword",
+          "required": true,
+          "type": "string",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "response",
+          "type": "string"
+        }
+      ],
+      "description": "resetUserPassword otp and password provided",
+      "http": [
+        {
+          "path": "/resetUserPassword",
+          "verb": "post"
+        }
+      ]
+    },
+    "resetUserPassFromPanel": {
+      "accepts": [
+        {
+          "arg": "userId",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "debug",
+          "type": "boolean",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "response",
+          "type": "string"
+        }
+      ],
+      "description": "resetUserPassFromPanel otp and password provided",
+      "http": [
+        {
+          "path": "/resetUserPassFromPanel",
+          "verb": "post"
+        }
+      ]
+    },
+    "changeUserStatus": {
+      "accepts": [
+        {
+          "arg": "userId",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "newStatus",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "response",
+          "type": "string"
+        }
+      ],
+      "description": "changeUserStatus if userId and new status provided",
+      "http": [
+        {
+          "path": "/changeUserStatus",
+          "verb": "post"
+        }
+      ]
+    },
+    "verifyOTP": {
+      "accepts": [
+        {
+          "arg": "phone",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "otp",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "response",
+          "type": "string"
+        }
+      ],
+      "description": "verify otp while registration",
+      "http": [
+        {
+          "path": "/verifyOTP",
+          "verb": "post"
+        }
+      ]
+    },
+    "testSMS": {
+      "accepts": [
+        {
+          "arg": "phone",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        },
+        {
+          "arg": "message",
+          "type": "string",
+          "required": true,
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "response",
+          "type": "string"
+        }
+      ],
+      "description": "test sms",
+      "http": [
+        {
+          "path": "/testSMS",
+          "verb": "post"
+        }
+      ]
+    },
+    "generateAccessToken": {
+      "accepts": [
+        {
+          "arg": "username",
+          "required": true,
+          "type": "string",
+          "http": {
+            "source": "query"
+          }
+        }
+      ],
+      "returns": [
+        {
+          "arg": "response",
+          "type": "string"
+        }
+      ],
+      "description": "add account username",
+      "http": [
+        {
+          "path": "/generateAccessToken",
+          "verb": "post"
+        }
+      ]
+    }
+  }
+}

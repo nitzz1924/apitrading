@@ -1,0 +1,19 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "mongoDB": {
+    "url": "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.0.1",
+    "name": "mongoDB",
+    "useNewUrlParser": true,
+    "connector": "mongodb"
+  },
+  "awsStorage": {
+    "name": "awsStorage",
+    "connector": "loopback-component-storage",
+    "provider": "amazon",
+    "key": "",
+    "keyId": ""
+  }
+}

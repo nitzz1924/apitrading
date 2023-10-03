@@ -1,0 +1,81 @@
+{
+  "name": "TdContactUs",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "contactName": {
+      "type": "string",
+      "required": true
+    },
+    "emailId": {
+      "type": "string",
+      "required": true
+    },
+    "subject": {
+      "type": "string",
+      "required": true
+    },
+    "message": {
+      "type": "string",
+      "required": true
+    },
+    "status": {
+      "type": "boolean",
+      "default": false
+    },
+    "contactNumber": {
+      "type": "string"
+    },
+    "contactType": {
+      "type": "string",
+      "default": "main"
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "WRITE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {
+    "pingMe": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "response",
+          "type": "string"
+        }
+      ],
+      "description": "ping service",
+      "http": [
+        {
+          "path": "/pingMe",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

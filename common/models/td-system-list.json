@@ -1,0 +1,68 @@
+{
+  "name": "TdSystemList",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "LimitToTenant": true
+  },
+  "properties": {
+    "listType": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "string"
+    },
+    "tenantCode": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW",
+      "property": "pingMe"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {
+    "pingMe": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "response",
+          "type": "string"
+        }
+      ],
+      "description": "ping service",
+      "http": [
+        {
+          "path": "/pingMe",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

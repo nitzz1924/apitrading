@@ -1,0 +1,119 @@
+{
+    "name": "TdDerivatives",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "detail": {
+            "type": "string"
+        },
+        "vehicleNumber": {
+            "type": "string"
+        },
+        "phoneNumber": {
+            "type": "string"
+        },
+        "resolveDetails": {
+            "type": "string"
+        },
+        "resolveStatus": {
+            "type": "boolean",
+            "default": false
+        },
+        "userType": {
+            "type": "string",
+            "default": "TDSUBSCRIBER"
+        },
+        "mtUserId": {
+            "type": "string"
+        },
+        "createdAt": {
+            "type": "date",
+            "defaultFn": "now"
+        }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {
+        "strikeprice": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/strikeprice",
+                    "verb": "get"
+                }
+            ]
+        },
+        "productexpirydate": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/productexpirydate",
+                    "verb": "get"
+                }
+            ]
+        },
+        "optiondata": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "arg": "expairdate",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "arg": "strickPrice",
+                    "type": "number",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/optiondata",
+                    "verb": "get"
+                }
+            ]
+        }
+    }
+}
