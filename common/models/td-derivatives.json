@@ -6,33 +6,6 @@
         "validateUpsert": true
     },
     "properties": {
-        "title": {
-            "type": "string",
-            "required": true
-        },
-        "detail": {
-            "type": "string"
-        },
-        "vehicleNumber": {
-            "type": "string"
-        },
-        "phoneNumber": {
-            "type": "string"
-        },
-        "resolveDetails": {
-            "type": "string"
-        },
-        "resolveStatus": {
-            "type": "boolean",
-            "default": false
-        },
-        "userType": {
-            "type": "string",
-            "default": "TDSUBSCRIBER"
-        },
-        "mtUserId": {
-            "type": "string"
-        },
         "createdAt": {
             "type": "date",
             "defaultFn": "now"
@@ -111,6 +84,27 @@
             "http": [
                 {
                     "path": "/optiondata",
+                    "verb": "get"
+                }
+            ]
+        },
+        "getdataIntra": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/getdataIntra",
                     "verb": "get"
                 }
             ]

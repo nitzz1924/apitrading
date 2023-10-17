@@ -26,9 +26,11 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.32",
     "morgan": "^1.10.0",
+    "node-cron": "^3.0.2",
     "request": "^2.88.2",
     "serve-favicon": "^2.0.1",
-    "strong-error-handler": "^3.0.0"
+    "strong-error-handler": "^3.0.0",
+    "util.promisify": "^1.1.2"
   },
   "devDependencies": {
     "eslint": "^3.17.1",
