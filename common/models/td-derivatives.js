@@ -3,10 +3,7 @@ const request = require("request");
 const configt = require("../../server/config.json");
 const app = require("../../server/server");
 const _ = require("lodash");
-const moment = require("moment");
 const cron = require("node-cron");
-const promisify = require("util").promisify;
-
 module.exports = function (TdDerivatives) {
   var getIntradayData = app.dataSources.getIntradayData;
   var getOptionExpiry = app.dataSources.getOptionExpiry;
@@ -378,4 +375,18 @@ module.exports = function (TdDerivatives) {
       });
     }
   });
+  TdDerivatives.getProductList=(callback)=>{
+    getIntradayData.getProductList((err, response) => {
+      if (_.isEmpty(response)) {
+        callback(null, {
+          result: { status: "0", message: "Data not find", list: [] },
+        });
+      } else {
+        callback(null, {
+          result: { status: "1", message: "Get Product List", list:response.PRODUCTS },
+        });
+      }
+    }
+    )
+  }
 };

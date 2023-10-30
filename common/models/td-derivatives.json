@@ -7,8 +7,7 @@
     },
     "properties": {
         "createdAt": {
-            "type": "date",
-            "defaultFn": "now"
+            "type": "date"
         }
     },
     "validations": [],
@@ -105,6 +104,21 @@
             "http": [
                 {
                     "path": "/getdataIntra",
+                    "verb": "get"
+                }
+            ]
+        },
+        "getProductList": {
+            "accepts": [],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/getProducts",
                     "verb": "get"
                 }
             ]
