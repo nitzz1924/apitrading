@@ -1,0 +1,45 @@
+{
+    "name": "TdHelpDesk",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "title": {
+            "type": "string",
+            "required": true
+        },
+        "detail": {
+            "type": "string"
+        },
+        "vehicleNumber": {
+            "type": "string"
+        },
+        "phoneNumber": {
+            "type": "string"
+        },
+        "resolveDetails": {
+            "type": "string"
+        },
+        "resolveStatus": {
+            "type": "boolean",
+            "default": false
+        },
+        "userType": {
+            "type": "string",
+            "default": "TDSUBSCRIBER"
+        },
+        "mtUserId": {
+            "type": "string"
+        },
+        "createdAt": {
+            "type": "date",
+            "defaultFn": "now"
+        }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {}
+}

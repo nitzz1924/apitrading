@@ -1,0 +1,31 @@
+{
+  "restApiRoot": "/api",
+  "host": "0.0.0.0",
+  "port": 3000,
+  "remoting": {
+    "context": false,
+    "rest": {
+      "handleErrors": false,
+      "normalizeHttpPath": false,
+      "xml": false
+    },
+    "json": {
+      "strict": false,
+      "limit": "100kb"
+    },
+    "urlencoded": {
+      "extended": true,
+      "limit": "100kb"
+    },
+    "cors": false
+  },
+  "debugMode": false,
+  "provideContactDetails": true,
+  "debugPhoneNumber": "8104035107",
+  "stock": {
+    "name": "stock",
+    "connector": "http://nimblerest.lisuns.com:4531",
+    "provider": "globelapi",
+    "key": "988dcf72-de6b-4637-9af7-fddbe9bfa7cd"
+  }
+}

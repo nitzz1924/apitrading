@@ -1,0 +1,128 @@
+{
+    "name": "TdDerivatives",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "createdAt": {
+            "type": "date"
+        }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {
+        "strikeprice": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/strikeprice",
+                    "verb": "get"
+                }
+            ]
+        },
+        "productexpirydate": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/productexpirydate",
+                    "verb": "get"
+                }
+            ]
+        },
+        "optiondata": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "arg": "expairdate",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "arg": "strickPrice",
+                    "type": "number",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/optiondata",
+                    "verb": "get"
+                }
+            ]
+        },
+        "getdataIntra": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/getdataIntra",
+                    "verb": "get"
+                }
+            ]
+        },
+        "getProducts": {
+            "accepts": [
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/getProducts",
+                    "verb": "get"
+                }
+            ]
+        }
+    }
+}
