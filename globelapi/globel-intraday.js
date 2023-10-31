@@ -3,6 +3,10 @@ loopback = require("loopback");
 const _ = require("lodash");
 var TdDerivatives = loopback.getModel("TdDerivatives");
 var globeldatasource = app.dataSources.globeldatasource;
+const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
+    for (const type of listType) {
+      getIntra(type);
+    }
 
 function findClosestItem(arr, value, key) {
   let closest = null;

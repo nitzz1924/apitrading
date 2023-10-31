@@ -136,6 +136,16 @@
             "expirydate"
           ]
         }
+      },
+      {
+        "template": {
+          "method": "GET",
+          "url": "http://nimblerest.lisuns.com:4531/GetProducts/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO"
+        },
+        "functions": {
+          "getProductList": [
+          ]
+        }
       }
     ]
   }
