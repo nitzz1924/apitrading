@@ -8,7 +8,11 @@
     "properties": {
         "createdAt": {
             "type": "date",
-            "defaultFn": "now"
+            "defaultFn": "now",
+            "data":"2023-11-02T06:39:09.101Z"
+        },
+        "timeUpdate": {
+            "type": "number"
         }
     },
     "validations": [],
@@ -120,6 +124,32 @@
             "http": [
                 {
                     "path": "/getProducts",
+                    "verb": "get"
+                }
+            ]
+        },
+        "getOptionTodayPeriod": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "arg": "time",
+                    "type": "number",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/getOptionTodayPeriod",
                     "verb": "get"
                 }
             ]

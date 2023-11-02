@@ -1,13 +1,14 @@
 app = require("../server/server");
 loopback = require("loopback");
 const _ = require("lodash");
+const moment = require('moment-timezone');
+const currentTime = moment().tz('Asia/Kolkata');
 var TdDerivatives = loopback.getModel("TdDerivatives");
 var globeldatasource = app.dataSources.globeldatasource;
 const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
     for (const type of listType) {
       getIntra(type);
     }
-
 function findClosestItem(arr, value, key) {
   let closest = null;
   let index = -1;
@@ -90,23 +91,9 @@ function getIntra(type) {
           const result = findClosestItem(callArr, currentOptionStrike, "value");
           const index = result.index;
           const strike = result.nearestValue;
-
           if (index !== -1) {
             let putTotal = 0;
             let callTotal = 0;
-            const date = new Date();
-            const time = date.getHours() + ":" + date.getMinutes();
-            const options = {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-              second: "2-digit",
-              timeZoneName: "short",
-            };
-            const formattedDateTime = date.toLocaleString("en-US", options);
-            //const istTime = date.toLocaleTimeString("en-IN", options);
             for (let i = index - 5; i < index + 5; i++) {
               putTotal += putArr[i].OPENINTERESTCHANGE;
               callTotal += callArr[i].OPENINTERESTCHANGE;
@@ -115,11 +102,9 @@ function getIntra(type) {
               ...currentdata,
               putTotal,
               callTotal,
-              time,
               strike,
-              ...{ createdAt: formattedDateTime },
+              ...{ time: moment(currentTime).format('HH:mm'),timeUpdate:moment().unix() },
             };
-
             if (!_.isEmpty(datatoday)) {
               await new Promise((resolve, reject) => {
                 TdDerivatives.create(datatoday, (err, data) => {
