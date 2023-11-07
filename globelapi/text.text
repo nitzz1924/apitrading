@@ -1,0 +1,2 @@
+*/5 9-16 * * 1-5 /usr/bin/node /home/ubuntu/apitrading/globelapi/fno-list.js >> /var/log/cron-fno.log 2>&1
+*/5 9-16 * * 1-5 /usr/bin/node /home/ubuntu/apitrading/globelapi/fno-list.js >> /var/log/cron-globel.log 2>&1

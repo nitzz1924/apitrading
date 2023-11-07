@@ -5,17 +5,14 @@ const moment = require('moment-timezone');
 const currentTime = moment().tz('Asia/Kolkata');
 var TdDerivatives = loopback.getModel("TdDerivatives");
 var globeldatasource = app.dataSources.globeldatasource;
-getfnoList();
-function getfnoList() {
-    globeldatasource.getProductList((err, response) => {
-        if (!_.isEmpty(response)) {
-            const listType = response.PRODUCTS;
-            for (const type of listType) {
-                getIntra(type);
-            }
+globeldatasource.getProductList((err, response) => {
+    if (!_.isEmpty(response)) {
+        const listType = response.PRODUCTS;
+        for (const type of listType) {
+            getIntra(type);
         }
-    })
-}
+    }
+})
 function findClosestItem(arr, value, key) {
     let closest = null;
     let index = -1;
@@ -110,7 +107,7 @@ function getIntra(type) {
                             putTotal,
                             callTotal,
                             strike,
-                            ...{ time: moment(currentTime).format('HH:mm'),timeUpdate:moment().unix() },
+                            ...{ time: moment(currentTime).format('HH:mm'),timeUpdate:moment(currentTime).unix() },
                           };
                         if (!_.isEmpty(datatoday)) {
                             await new Promise((resolve, reject) => {

@@ -128,7 +128,7 @@
                 }
             ]
         },
-        "getOptionTodayPeriod": {
+        "getOptionDataList": {
             "accepts": [
                 {
                     "arg": "type",
@@ -136,8 +136,8 @@
                     "required": true
                 },
                 {
-                    "arg": "time",
-                    "type": "number",
+                    "arg": "expairdate",
+                    "type": "string",
                     "required": true
                 }
             ],
@@ -149,7 +149,7 @@
             "description": "",
             "http": [
                 {
-                    "path": "/getOptionTodayPeriod",
+                    "path": "/getOptionDataList",
                     "verb": "get"
                 }
             ]

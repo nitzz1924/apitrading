@@ -103,7 +103,7 @@ function getIntra(type) {
               putTotal,
               callTotal,
               strike,
-              ...{ time: moment(currentTime).format('HH:mm'),timeUpdate:moment().unix() },
+              ...{ time: moment(currentTime).format('HH:mm'),timeUpdate:moment(currentTime).unix() },
             };
             if (!_.isEmpty(datatoday)) {
               await new Promise((resolve, reject) => {
