@@ -220,8 +220,10 @@ module.exports = function (TdDerivatives) {
               const date = new Date();
               const time = date.getHours() + ":" + date.getMinutes();
               for (let i = index - 5; i < index + 5; i++) {
+                if (putArr[i] && callArr[i]) {
                 putTotal += putArr[i].OPENINTERESTCHANGE;
                 callTotal += callArr[i].OPENINTERESTCHANGE;
+                }
               }
               const datatoday = {
                 ...currentdata,
