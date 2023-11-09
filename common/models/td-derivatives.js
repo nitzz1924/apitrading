@@ -149,7 +149,6 @@ module.exports = function (TdDerivatives) {
       } else {
         const currentdata = response;
         const strickPrice = response.AVERAGETRADEDPRICE;
-
         const getOptionExpiryPromise = new Promise((resolve, reject) => {
           getOptionExpiry.getOptionExpiryDates(type, (err, responsedate) => {
             if (_.isEmpty(responsedate)) {
@@ -316,6 +315,11 @@ module.exports = function (TdDerivatives) {
         if (_.isEmpty(data)) {
           callback(null, { list: [] });
         } else {
+          const filedata = [];
+          let value=0;
+          for (const list of data) {
+              
+          }
           callback(null, { list: data });
         }
       });
@@ -323,15 +327,11 @@ module.exports = function (TdDerivatives) {
   cron.schedule(scheduletwo, async () => {
     // Get the current date and time
     const date_ob = new Date();
-
     // Define the time zone (Asia/Kolkata for India Standard Time)
     const time_zone = 'Asia/Kolkata';
-
     // Format the date and time with the specified time zone
     const formattedTime = new Intl.DateTimeFormat('en-US', { timeZone: time_zone, timeStyle: 'short' }).format(date_ob);
-
     console.log(formattedTime);
-
     getIntradayData.getProductList((err, response) => {
       if (!_.isEmpty(response)) {
         const listType = response.PRODUCTS;
@@ -445,16 +445,16 @@ module.exports = function (TdDerivatives) {
     })
   });
   cron.schedule(scheduleone, async () => {
-     // Get the current date and time
-     const date_ob = new Date();
+    // Get the current date and time
+    const date_ob = new Date();
 
-     // Define the time zone (Asia/Kolkata for India Standard Time)
-     const time_zone = 'Asia/Kolkata';
- 
-     // Format the date and time with the specified time zone
-     const formattedTime = new Intl.DateTimeFormat('en-US', { timeZone: time_zone, timeStyle: 'short' }).format(date_ob);
- 
-     console.log(formattedTime);
+    // Define the time zone (Asia/Kolkata for India Standard Time)
+    const time_zone = 'Asia/Kolkata';
+
+    // Format the date and time with the specified time zone
+    const formattedTime = new Intl.DateTimeFormat('en-US', { timeZone: time_zone, timeStyle: 'short' }).format(date_ob);
+
+    console.log(formattedTime);
 
     const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
     for (const type of listType) {
@@ -541,7 +541,7 @@ module.exports = function (TdDerivatives) {
                   putTotal,
                   callTotal,
                   strike,
-                  time:formattedTime,
+                  time: formattedTime,
                   timeUpdate: moment(currentTime).unix(),
                 };
                 if (!_.isEmpty(datatoday)) {
