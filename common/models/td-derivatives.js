@@ -7,11 +7,14 @@ const cron = require("node-cron");
 const moment = require('moment-timezone');
 const currentTime = moment().tz('Asia/Kolkata');
 module.exports = function (TdDerivatives) {
+  const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
   var getIntradayData = app.dataSources.getIntradayData;
   var getOptionExpiry = app.dataSources.getOptionExpiry;
   var getOptionData = app.dataSources.getOptionData;
-  var scheduletwo='*/30 3-10 * * 1-5';
-  var scheduleone='*/5 3-10 * * 1-5';
+  var scheduletwo = '*/30 4-11 * * 1-5';
+  var scheduleone = '*/5 4-11 * * 1-5';
+
+
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
     request(currenturl, function (error, response, body) {
@@ -230,7 +233,7 @@ module.exports = function (TdDerivatives) {
                 putTotal,
                 callTotal,
                 strike,
-                ...{ time: moment(currentTime).format('HH:mm'),timeUpdate:moment(currentTime).unix() },
+                ...{ time: moment(currentTime).format('HH:mm'), timeUpdate: moment(currentTime).unix() },
               };
 
               if (!_.isEmpty(datatoday)) {
@@ -283,22 +286,52 @@ module.exports = function (TdDerivatives) {
         //console.log(currenturl);
         if (_.isEmpty(body)) {
           callback(null, {
-            List: { status: "0", message: "Data not find"},
+            List: { status: "0", message: "Data not find" },
           });
         } else {
           callback(null, {
-            List: { status: "0", message: "data get successfully",data:JSON.parse(body)},
+            List: { status: "0", message: "data get successfully", data: JSON.parse(body) },
           });
         }
       }
     }
     )
   };
+  TdDerivatives.getDerivativesData = (type, time, callback) => {
+    const currentDate = new Date() // Create a Date object for the current date
+    const startOfToday = new Date(currentDate) // Clone the current date
+    startOfToday.setHours(9, 0, 0, 0) // Set the time to 00:00:00.000
+    const endOfToday = new Date(currentDate) // Clone the current date
+    endOfToday.setHours(15, 59, 59, 999) // Set the time to 23:59:59.999
+    let filter = {
+      where: {
+        INSTRUMENTIDENTIFIER: `${type}-I`,
+        and: [
+          { createdAt: { gte: startOfToday } },
+          { createdAt: { lte: endOfToday } },
+        ],
+      },
+      order: "id desc"
+    };
+    TdDerivatives.find(filter)
+      .then(JSON.toJSON)
+      .then(data => {
+        if (_.isEmpty(data)) {
+          callback(null, { list: [] });
+        } else {
+          callback(null, { list: data });
+        }
+      });
+  };
   cron.schedule(scheduletwo, async () => {
+    let date_ob = new Date();
+    let hours = date_ob.getHours();
+    // current minutes
+    let minutes = date_ob.getMinutes();
     getIntradayData.getProductList((err, response) => {
       if (!_.isEmpty(response)) {
         const listType = response.PRODUCTS;
-          for (const type of listType.slice(16)) {
+        for (const type of listType.slice(16)) {
           getIntradayData.getcurrentIntraday(type, (err, response) => {
             if (_.isEmpty(response)) {
               console.log("error 1");
@@ -373,13 +406,13 @@ module.exports = function (TdDerivatives) {
                       putTotal += putArr[i].OPENINTERESTCHANGE;
                       callTotal += callArr[i].OPENINTERESTCHANGE;
                     }
-                    
+
                     const datatoday = {
                       ...currentdata,
                       putTotal,
                       callTotal,
                       strike,
-                      time: moment(currentTime).format('HH:mm'),
+                      time: hours + ":" + minutes,
                       timeUpdate: moment(currentTime).unix(),
                     };
                     if (!_.isEmpty(datatoday)) {
@@ -407,7 +440,12 @@ module.exports = function (TdDerivatives) {
       }
     })
   });
-   cron.schedule(scheduleone, async () => {
+  cron.schedule(scheduleone, async () => {
+    let date_ob = new Date();
+    let hours = date_ob.getHours();
+    // current minutes
+    let minutes = date_ob.getMinutes();
+
     const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
     for (const type of listType) {
       getIntradayData.getcurrentIntraday(type, (err, response) => {
@@ -451,8 +489,8 @@ module.exports = function (TdDerivatives) {
               const apiResult = responseOption;
               const putArr = [];
               const callArr = [];
-
               for (const result of apiResult) {
+
                 const identi = result.INSTRUMENTIDENTIFIER.split("_");
                 const value = parseInt(identi[4]);
                 if (result.SERVERTIME > 0) {
@@ -473,7 +511,6 @@ module.exports = function (TdDerivatives) {
                   }
                 }
               }
-
               const currentOptionStrike = strickPrice;
               const result = findClosestItem(
                 callArr,
@@ -482,7 +519,6 @@ module.exports = function (TdDerivatives) {
               );
               const index = result.index;
               const strike = result.nearestValue;
-
               if (index !== -1) {
                 let putTotal = 0;
                 let callTotal = 0;
@@ -495,7 +531,7 @@ module.exports = function (TdDerivatives) {
                   putTotal,
                   callTotal,
                   strike,
-                  time: moment(currentTime).format('HH:mm'),
+                  time: hours + ":" + minutes,
                   timeUpdate: moment(currentTime).unix(),
                 };
                 if (!_.isEmpty(datatoday)) {
