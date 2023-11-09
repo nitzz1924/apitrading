@@ -7,14 +7,11 @@ const cron = require("node-cron");
 const moment = require('moment-timezone');
 const currentTime = moment().tz('Asia/Kolkata');
 module.exports = function (TdDerivatives) {
-  const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
   var getIntradayData = app.dataSources.getIntradayData;
   var getOptionExpiry = app.dataSources.getOptionExpiry;
   var getOptionData = app.dataSources.getOptionData;
   var scheduletwo = '*/30 4-11 * * 1-5';
   var scheduleone = '*/5 4-11 * * 1-5';
-
-
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
     request(currenturl, function (error, response, body) {
@@ -300,9 +297,9 @@ module.exports = function (TdDerivatives) {
   TdDerivatives.getDerivativesData = (type, time, callback) => {
     const currentDate = new Date() // Create a Date object for the current date
     const startOfToday = new Date(currentDate) // Clone the current date
-    startOfToday.setHours(9, 0, 0, 0) // Set the time to 00:00:00.000
+    startOfToday.setHours(0, 0, 0, 0) // Set the time to 00:00:00.000
     const endOfToday = new Date(currentDate) // Clone the current date
-    endOfToday.setHours(15, 59, 59, 999) // Set the time to 23:59:59.999
+    endOfToday.setHours(23, 59, 59, 999) // Set the time to 23:59:59.999
     let filter = {
       where: {
         INSTRUMENTIDENTIFIER: `${type}-I`,
@@ -324,10 +321,17 @@ module.exports = function (TdDerivatives) {
       });
   };
   cron.schedule(scheduletwo, async () => {
-    let date_ob = new Date();
-    let hours = date_ob.getHours();
-    // current minutes
-    let minutes = date_ob.getMinutes();
+    // Get the current date and time
+    const date_ob = new Date();
+
+    // Define the time zone (Asia/Kolkata for India Standard Time)
+    const time_zone = 'Asia/Kolkata';
+
+    // Format the date and time with the specified time zone
+    const formattedTime = new Intl.DateTimeFormat('en-US', { timeZone: time_zone, timeStyle: 'short' }).format(date_ob);
+
+    console.log(formattedTime);
+
     getIntradayData.getProductList((err, response) => {
       if (!_.isEmpty(response)) {
         const listType = response.PRODUCTS;
@@ -412,7 +416,7 @@ module.exports = function (TdDerivatives) {
                       putTotal,
                       callTotal,
                       strike,
-                      time: hours + ":" + minutes,
+                      time: formattedTime,
                       timeUpdate: moment(currentTime).unix(),
                     };
                     if (!_.isEmpty(datatoday)) {
@@ -441,10 +445,16 @@ module.exports = function (TdDerivatives) {
     })
   });
   cron.schedule(scheduleone, async () => {
-    let date_ob = new Date();
-    let hours = date_ob.getHours();
-    // current minutes
-    let minutes = date_ob.getMinutes();
+     // Get the current date and time
+     const date_ob = new Date();
+
+     // Define the time zone (Asia/Kolkata for India Standard Time)
+     const time_zone = 'Asia/Kolkata';
+ 
+     // Format the date and time with the specified time zone
+     const formattedTime = new Intl.DateTimeFormat('en-US', { timeZone: time_zone, timeStyle: 'short' }).format(date_ob);
+ 
+     console.log(formattedTime);
 
     const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
     for (const type of listType) {
@@ -531,7 +541,7 @@ module.exports = function (TdDerivatives) {
                   putTotal,
                   callTotal,
                   strike,
-                  time: hours + ":" + minutes,
+                  time:formattedTime,
                   timeUpdate: moment(currentTime).unix(),
                 };
                 if (!_.isEmpty(datatoday)) {
