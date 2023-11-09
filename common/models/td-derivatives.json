@@ -153,6 +153,32 @@
                     "verb": "get"
                 }
             ]
+        },
+        "getDerivativesData": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "arg": "time",
+                    "type": "number",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/getDerivativesData",
+                    "verb": "get"
+                }
+            ]
         }
     }
 }
