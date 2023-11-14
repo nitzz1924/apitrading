@@ -179,6 +179,32 @@
                     "verb": "get"
                 }
             ]
+        },
+        "indicatorView": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "arg": "time",
+                    "type": "number",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/indicatorView",
+                    "verb": "get"
+                }
+            ]
         }
     }
 }
