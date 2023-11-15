@@ -186,10 +186,9 @@
                     "arg": "type",
                     "type": "string",
                     "required": true
-                },
-                {
+                },{
                     "arg": "time",
-                    "type": "number",
+                    "type": "Number",
                     "required": true
                 }
             ],

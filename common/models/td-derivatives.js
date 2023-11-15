@@ -4,14 +4,14 @@ const configt = require("../../server/config.json");
 const app = require("../../server/server");
 const _ = require("lodash");
 const cron = require("node-cron");
-const moment = require('moment-timezone');
-const currentTime = moment().tz('Asia/Kolkata');
+const moment = require("moment-timezone");
+const currentTime = moment().tz("Asia/Kolkata");
 module.exports = function (TdDerivatives) {
   var getIntradayData = app.dataSources.getIntradayData;
   var getOptionExpiry = app.dataSources.getOptionExpiry;
   var getOptionData = app.dataSources.getOptionData;
-  var scheduletwo = '*/30 4-11 * * 1-5';
-  var scheduleone = '*/5 4-11 * * 1-5';
+  var scheduletwo = "#*/30 4-11 * * 1-5";
+  var scheduleone = "#*/5 4-11 * * 1-5";
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
     request(currenturl, function (error, response, body) {
@@ -231,7 +231,10 @@ module.exports = function (TdDerivatives) {
                 putTotal,
                 callTotal,
                 strike,
-                ...{ time: moment(currentTime).format('HH:mm'), timeUpdate: moment(currentTime).unix() },
+                ...{
+                  time: moment(currentTime).format("HH:mm"),
+                  timeUpdate: moment(currentTime).unix(),
+                },
               };
 
               if (!_.isEmpty(datatoday)) {
@@ -271,12 +274,15 @@ module.exports = function (TdDerivatives) {
         });
       } else {
         callback(null, {
-          result: { status: "1", message: "Get Product List", list: response.PRODUCTS },
+          result: {
+            status: "1",
+            message: "Get Product List",
+            list: response.PRODUCTS,
+          },
         });
       }
-    }
-    )
-  }
+    });
+  };
   TdDerivatives.getOptionDataList = (type, expairdate, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuoteOptionChain/?accessKey=${configt.stock.key}&exchange=NFO&product=${type}&expiry=${expairdate}`;
     request(currenturl, function (error, response, body) {
@@ -288,30 +294,35 @@ module.exports = function (TdDerivatives) {
           });
         } else {
           callback(null, {
-            List: { status: "0", message: "data get successfully", data: JSON.parse(body) },
+            List: {
+              status: "0",
+              message: "data get successfully",
+              data: JSON.parse(body),
+            },
           });
         }
       }
-    }
-    )
+    });
   };
   TdDerivatives.getDerivativesData = (type, time, callback) => {
     const startTime = 9 * 60; // Start time in minutes (9:00 AM)
-    const endTime = 15 * 60;  // End time in minutes (3:00 PM)
-    const increment = time;     // Increment in minutes
+    const endTime = 15 * 60; // End time in minutes (3:00 PM)
+    const increment = time; // Increment in minutes
     const timesArray = [];
     for (let minutes = startTime; minutes <= endTime; minutes += increment) {
       const hour = Math.floor(minutes / 60);
       const minute = minutes % 60;
-      const formattedTime = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+      const formattedTime = `${hour.toString().padStart(2, "0")}:${minute
+        .toString()
+        .padStart(2, "0")}`;
       timesArray.push(formattedTime);
     }
     //console.log(timesArray);
-    const currentDate = new Date() // Create a Date object for the current date
-    const startOfToday = new Date(currentDate) // Clone the current date
-    startOfToday.setHours(0, 0, 0, 0) // Set the time to 00:00:00.000
-    const endOfToday = new Date(currentDate) // Clone the current date
-    endOfToday.setHours(23, 59, 59, 999) // Set the time to 23:59:59.999
+    const currentDate = new Date(); // Create a Date object for the current date
+    const startOfToday = new Date(currentDate); // Clone the current date
+    startOfToday.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
+    const endOfToday = new Date(currentDate); // Clone the current date
+    endOfToday.setHours(23, 59, 59, 999); // Set the time to 23:59:59.999
     let filter = {
       where: {
         INSTRUMENTIDENTIFIER: `${type}-I`,
@@ -320,11 +331,11 @@ module.exports = function (TdDerivatives) {
           { createdAt: { lte: endOfToday } },
         ],
       },
-      order: "id desc"
+      order: "id desc",
     };
     TdDerivatives.find(filter)
       .then(JSON.toJSON)
-      .then(data => {
+      .then((data) => {
         if (_.isEmpty(data)) {
           callback(null, { list: [] });
         } else {
@@ -332,7 +343,7 @@ module.exports = function (TdDerivatives) {
           for (let v = 0; v < timesArray.length; v++) {
             for (const list of data) {
               if (list.time === timesArray[v]) {
-                filedata.push(list)
+                filedata.push(list);
               }
             }
           }
@@ -368,19 +379,21 @@ module.exports = function (TdDerivatives) {
                     );
                   });
                   const expirydate = responsedate.EXPIRYDATES[0];
-                  const responseOption = await new Promise((resolve, reject) => {
-                    getOptionData.getOptionDataToday(
-                      type,
-                      expirydate,
-                      (err, responseOption) => {
-                        if (_.isEmpty(responseOption)) {
-                          reject("Data not found");
-                        } else {
-                          resolve(responseOption);
+                  const responseOption = await new Promise(
+                    (resolve, reject) => {
+                      getOptionData.getOptionDataToday(
+                        type,
+                        expirydate,
+                        (err, responseOption) => {
+                          if (_.isEmpty(responseOption)) {
+                            reject("Data not found");
+                          } else {
+                            resolve(responseOption);
+                          }
                         }
-                      }
-                    );
-                  });
+                      );
+                    }
+                  );
                   const apiResult = responseOption;
                   const putArr = [];
                   const callArr = [];
@@ -452,7 +465,7 @@ module.exports = function (TdDerivatives) {
           });
         }
       }
-    })
+    });
   });
   cron.schedule(scheduleone, async () => {
     const gettime = getTimeCurrent();
@@ -500,7 +513,6 @@ module.exports = function (TdDerivatives) {
               const putArr = [];
               const callArr = [];
               for (const result of apiResult) {
-
                 const identi = result.INSTRUMENTIDENTIFIER.split("_");
                 const value = parseInt(identi[4]);
                 if (result.SERVERTIME > 0) {
@@ -574,27 +586,50 @@ module.exports = function (TdDerivatives) {
     date_ob.setMinutes(date_ob.getMinutes() + 30);
 
     // Get the updated hours and minutes
-    const hours = date_ob.getHours().toString().padStart(2, '0');
-    const minutes = date_ob.getMinutes().toString().padStart(2, '0');
-    return hours + ':' + minutes;
+    const hours = date_ob.getHours().toString().padStart(2, "0");
+    const minutes = date_ob.getMinutes().toString().padStart(2, "0");
+    return hours + ":" + minutes;
   }
-  TdDerivatives.indicatorView = (type, time, callback) => {
+  TdDerivatives.indicatorView = (type,time, callback) => {
+    const itemsIndicatorList = [];
+    console.log(`------------1--------------`);
     const startTime = 9 * 60; // Start time in minutes (9:00 AM)
-    const endTime = 15 * 60;  // End time in minutes (3:00 PM)
-    const increment = time;     // Increment in minutes
+    const endTime = 15 * 60; // End time in minutes (3:00 PM)
+    const increment = time; // Increment in minutes
     const timesArray = [];
-    for (let minutes = startTime; minutes <= endTime; minutes += increment) {
-      const hour = Math.floor(minutes / 60);
-      const minute = minutes % 60;
-      const formattedTime = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
-      timesArray.push(formattedTime);
+    if (time === 5 || time === 15 || time === 30) {
+      console.log(`------------2--------------`);
+      for (let minutes = startTime; minutes <= endTime; minutes += increment) {
+        const hour = Math.floor(minutes / 60);
+        const minute = minutes % 60;
+        const formattedTime = `${hour.toString().padStart(2, "0")}:${minute
+          .toString()
+          .padStart(2, "0")}`;
+        timesArray.push(formattedTime);
+      }
+    } else if (time === 1) {
+      console.log(`------------3--------------`);
+      for (let hours = startTime; hours <= endTime; hours += increment) {
+        const hour = Math.floor(hours);
+        const minute = (hours % 1) * 60; // Convert fractional part to minutes
+        const formattedTime = `${hour.toString().padStart(2, "0")}:${minute
+          .toString()
+          .padStart(2, "0")}`;
+        timesArray.push(formattedTime);
+      }
+    } else if (time != 12) {
+      console.log(`------------4--------------`);
+      callback(null, {
+        list: [],
+        message: "Time not currect use 5,15,30,1 for Hour and all day for 12",
+      });
     }
     //console.log(timesArray);
-    const currentDate = new Date() // Create a Date object for the current date
-    const startOfToday = new Date(currentDate) // Clone the current date
-    startOfToday.setHours(0, 0, 0, 0) // Set the time to 00:00:00.000
-    const endOfToday = new Date(currentDate) // Clone the current date
-    endOfToday.setHours(23, 59, 59, 999) // Set the time to 23:59:59.999
+    const currentDate = new Date(); // Create a Date object for the current date
+    const startOfToday = new Date(currentDate); // Clone the current date
+    startOfToday.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
+    const endOfToday = new Date(currentDate); // Clone the current date
+    endOfToday.setHours(23, 59, 59, 999); // Set the time to 23:59:59.999
     let filter = {
       where: {
         INSTRUMENTIDENTIFIER: `${type}-I`,
@@ -603,23 +638,31 @@ module.exports = function (TdDerivatives) {
           { createdAt: { lte: endOfToday } },
         ],
       },
-      order: "id desc"
+      order: "id desc",
     };
     TdDerivatives.find(filter)
       .then(JSON.toJSON)
-      .then(data => {
+      .then((data) => {
+        console.log(`------------5--------------`);
         if (_.isEmpty(data)) {
-          callback(null, { list: [] });
+          callback(null, { list: [], message: "data is emty" });
         } else {
           const filedata = [];
           const prices = [];
           const closingPrices = [];
           for (let v = 0; v < timesArray.length; v++) {
             for (const list of data) {
-              if (list.time === timesArray[v]) {
-                filedata.push(list)
-                prices.push(list.BUYPRICE)
-                closingPrices.push(list.SELLPRICE)
+              if (time != 12) {
+                if (list.time === timesArray[v]) {
+                  //console.log(list);
+                  filedata.push(list);
+                  prices.push(list.BUYPRICE);
+                  closingPrices.push(list.SELLPRICE);
+                }
+              } else {
+                filedata.push(list);
+                prices.push(list.BUYPRICE);
+                closingPrices.push(list.SELLPRICE);
               }
             }
           }
@@ -632,9 +675,8 @@ module.exports = function (TdDerivatives) {
           const int7 = implementcalculateAroon(filedata);
           const int8 = implementTradingStrategy(closingPrices);
           const int9 = calculateStochasticOscillator(filedata);
-          const list = [];
-          list.push({
-            time: time + " MIN",
+          itemsIndicatorList.push({
+            time: time === 1 ? "Hour" : time === 12 ? "Day" : time + " MIN",
             Ind1: int1,
             Ind2: int2,
             Int3: int3,
@@ -644,9 +686,9 @@ module.exports = function (TdDerivatives) {
             Int7: int7,
             Int8: int8,
             Int9: int9,
-          })
-          callback(null, { list: list });
+          });
         }
+        callback(null, { list: itemsIndicatorList });
       });
   };
   function calculateRSI(closingPrices) {
@@ -663,12 +705,18 @@ module.exports = function (TdDerivatives) {
     }
     avgDownwardChange /= closingPrices.length;
     // Calculate the RSI
-    const rsi = 100 - (100 / (1 + (avgUpwardChange / avgDownwardChange)));
-    return rsi != null ? rsi >= 70 ? "UP" : "DN" : "DN";
+    const rsi = 100 - 100 / (1 + avgUpwardChange / avgDownwardChange);
+    return rsi != null ? (rsi >= 70 ? "UP" : "DN") : "DN";
   }
-  const implementReversalStrategy = (prices, lookbackPeriod = 20, threshold = 0.02) => {
+  const implementReversalStrategy = (
+    prices,
+    lookbackPeriod = 20,
+    threshold = 0.02
+  ) => {
     const currentPrice = prices[prices.length - 1];
-    const averagePrice = prices.slice(-lookbackPeriod).reduce((sum, price) => sum + price, 0) / lookbackPeriod;
+    const averagePrice =
+      prices.slice(-lookbackPeriod).reduce((sum, price) => sum + price, 0) /
+      lookbackPeriod;
     if (currentPrice < averagePrice * (1 - threshold)) {
       // setSignal('Potential Reversal: Buy Signal');
       return "DN";
@@ -680,10 +728,16 @@ module.exports = function (TdDerivatives) {
       return "UP";
     }
   };
-  const implementTradingStrategy = (prices, position = "neutral", multiplier = 2) => {
-    const middleBand = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+  const implementTradingStrategy = (
+    prices,
+    position = "neutral",
+    multiplier = 2
+  ) => {
+    const middleBand =
+      prices.reduce((sum, price) => sum + price, 0) / prices.length;
     const standardDeviation = Math.sqrt(
-      prices.reduce((sum, price) => sum + Math.pow(price - middleBand, 2), 0) / prices.length
+      prices.reduce((sum, price) => sum + Math.pow(price - middleBand, 2), 0) /
+        prices.length
     );
 
     const upperBand = middleBand + multiplier * standardDeviation;
@@ -693,9 +747,9 @@ module.exports = function (TdDerivatives) {
     const currentPrice = prices[prices.length - 1];
 
     // Trading strategy logic
-    if (currentPrice < lowerBand && position !== 'long') {
+    if (currentPrice < lowerBand && position !== "long") {
       return "DN";
-    } else if (currentPrice > upperBand && position !== 'short') {
+    } else if (currentPrice > upperBand && position !== "short") {
       return "UP";
     } else {
       return "DN";
@@ -711,7 +765,7 @@ module.exports = function (TdDerivatives) {
       const HIGH = data[i].HIGH;
       const LOW = data[i].LOW;
       const volume = data[i].VALUE;
-      const moneyFLOWMultiplier = ((CLOSE - LOW) - (HIGH - CLOSE)) / (HIGH - LOW);
+      const moneyFLOWMultiplier = (CLOSE - LOW - (HIGH - CLOSE)) / (HIGH - LOW);
       const moneyFLOWVolume = moneyFLOWMultiplier * volume;
       sumVolume += volume;
       sumCMF += moneyFLOWVolume;
@@ -722,18 +776,16 @@ module.exports = function (TdDerivatives) {
         } else {
           countB++;
         }
-
       } else {
         countB++;
       }
     }
     if (countS >= countB) {
       return "UP";
-    }
-    else {
+    } else {
       return "DN";
     }
-  }
+  };
   const implementcalculateROC = (data, period = 14) => {
     const rocData = [];
     let valueB = 0;
@@ -745,18 +797,16 @@ module.exports = function (TdDerivatives) {
       rocData.push(roc);
       if (roc > 0) {
         valueS++;
-      }
-      else {
+      } else {
         valueB++;
       }
     }
     if (valueS >= valueB) {
       return "UP";
-    }
-    else {
+    } else {
       return "DN";
     }
-  }
+  };
   const implementcalculateADX = (data, period = 14) => {
     let valueB = 0;
     let valueS = 0;
@@ -770,7 +820,11 @@ module.exports = function (TdDerivatives) {
       const low = data[i].LOW;
       const prevClose = data[i - 1].CLOSE;
 
-      const tr = Math.max(high - low, Math.abs(high - prevClose), Math.abs(low - prevClose));
+      const tr = Math.max(
+        high - low,
+        Math.abs(high - prevClose),
+        Math.abs(low - prevClose)
+      );
       trueRange.push(tr);
     }
 
@@ -795,17 +849,17 @@ module.exports = function (TdDerivatives) {
       atr += trueRange[i];
     }
     atr /= period;
-
     // Calculate Smoothed +DM and -DM for the first period
     let smoothedPlusDM = 0;
     let smoothedMinusDM = 0;
-    for (let i = 0; i < period; i++) {
-      smoothedPlusDM += directionalMovement[i].plusDM;
-      smoothedMinusDM += directionalMovement[i].minusDM;
+    if (directionalMovement.length > 0) {
+      for (let i = 0; i < period && i < directionalMovement.length; i++) {
+        smoothedPlusDM += directionalMovement[i].plusDM;
+        smoothedMinusDM += directionalMovement[i].minusDM;
+      }
     }
     smoothedPlusDM /= period;
     smoothedMinusDM /= period;
-
     // Calculate Smoothed True Range for the first period
     let smoothedTR = 0;
     for (let i = 0; i < period; i++) {
@@ -830,7 +884,8 @@ module.exports = function (TdDerivatives) {
       atr = ((period - 1) * atr + currentTrueRange) / period;
       smoothedTR = ((period - 1) * smoothedTR + currentTrueRange) / period;
       smoothedPlusDM = ((period - 1) * smoothedPlusDM + currentPlusDM) / period;
-      smoothedMinusDM = ((period - 1) * smoothedMinusDM + currentMinusDM) / period;
+      smoothedMinusDM =
+        ((period - 1) * smoothedMinusDM + currentMinusDM) / period;
 
       plusDI = (smoothedPlusDM / smoothedTR) * 100;
       minusDI = (smoothedMinusDM / smoothedTR) * 100;
@@ -841,42 +896,43 @@ module.exports = function (TdDerivatives) {
       smoothedADX.push(adx);
       if (adx > 20) {
         valueS++;
-      }
-      else {
+      } else {
         valueB++;
       }
     }
     if (valueS >= valueB) {
       return "UP";
-    }
-    else {
+    } else {
       return "DN";
     }
   };
-  const implementcalculateAroon = (data, period = 14) => {
+  const implementcalculateAroon = (data, period = 15) => {
     const aroonUp = [];
     const aroonDown = [];
     for (let i = period; i < data.length; i++) {
-      const highPrices = data.slice(i - period, i).map(item => item.HIGH);
-      const lowPrices = data.slice(i - period, i).map(item => item.LOW);
+      const highPrices = data.slice(i - period, i).map((item) => item.HIGH);
+      const lowPrices = data.slice(i - period, i).map((item) => item.LOW);
       const highestHigh = Math.max(...highPrices);
       const lowestLow = Math.min(...lowPrices);
-      const aroonUpValue = ((period - (i - highPrices.indexOf(highestHigh))) / period) * 100;
-      const aroonDownValue = ((period - (i - lowPrices.indexOf(lowestLow))) / period) * 100;
+      const aroonUpValue =
+        ((period - (i - highPrices.indexOf(highestHigh))) / period) * 100;
+      const aroonDownValue =
+        ((period - (i - lowPrices.indexOf(lowestLow))) / period) * 100;
       aroonUp.push(aroonUpValue);
       aroonDown.push(aroonDownValue);
       const isNearTarget1 = Math.abs(aroonUpValue - 100) <= 5;
       const isNearTarget2 = Math.abs(aroonUpValue - 0) <= 5;
       if (isNearTarget1 && isNearTarget2) {
-        return 'DN';
+        return "DN";
       } else if (isNearTarget1) {
-        return 'DN';
+        return "DN";
       } else if (isNearTarget2) {
-        return 'UP';
+        return "UP";
       } else {
-        return 'DN';
+        return "DN";
       }
     }
+    return "DN";
   };
   const calculateStochasticOscillator = (data, period = 14) => {
     let valueB = 0;
@@ -884,23 +940,22 @@ module.exports = function (TdDerivatives) {
     const stochasticOscillatorValues = [];
     for (let i = period - 1; i < data.length; i++) {
       const currentClose = data[i].close;
-      const lows = data.slice(i - period + 1, i + 1).map(item => item.LOW);
-      const highs = data.slice(i - period + 1, i + 1).map(item => item.HIGH);
+      const lows = data.slice(i - period + 1, i + 1).map((item) => item.LOW);
+      const highs = data.slice(i - period + 1, i + 1).map((item) => item.HIGH);
       const lowestLow = Math.min(...lows);
       const highestHigh = Math.max(...highs);
-      const percentK = ((currentClose - lowestLow) / (highestHigh - lowestLow)) * 100;
+      const percentK =
+        ((currentClose - lowestLow) / (highestHigh - lowestLow)) * 100;
       stochasticOscillatorValues.push(percentK);
       if (percentK > 80) {
         valueS++;
-      }
-      else {
+      } else {
         valueB++;
       }
     }
     if (valueS >= valueB) {
       return "UP";
-    }
-    else {
+    } else {
       return "DN";
     }
   };
