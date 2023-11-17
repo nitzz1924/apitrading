@@ -46,6 +46,20 @@
           "getProductList": [
           ]
         }
+      },
+      {
+        "template": {
+          "method": "GET",
+          "url": "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO&instrumentIdentifier={type}-I&periodicity={periodicity}&max={max}&period={period}"
+        },
+        "functions": {
+          "GetHistory": [
+            "type",
+            "periodicity",
+            "max",
+            "period"
+          ]
+        }
       }
     ]
   },

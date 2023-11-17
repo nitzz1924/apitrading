@@ -10,8 +10,8 @@ module.exports = function (TdDerivatives) {
   var getIntradayData = app.dataSources.getIntradayData;
   var getOptionExpiry = app.dataSources.getOptionExpiry;
   var getOptionData = app.dataSources.getOptionData;
-  var scheduletwo = "#*/30 4-11 * * 1-5";
-  var scheduleone = "#*/5 4-11 * * 1-5";
+  var scheduletwo = "*/30 4-11 * * 1-5";
+  var scheduleone = "*/5 4-11 * * 1-5";
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
     request(currenturl, function (error, response, body) {
@@ -590,7 +590,7 @@ module.exports = function (TdDerivatives) {
     const minutes = date_ob.getMinutes().toString().padStart(2, "0");
     return hours + ":" + minutes;
   }
-  TdDerivatives.indicatorView = (type,time, callback) => {
+  TdDerivatives.indicatorView = (type, time, callback) => {
     const itemsIndicatorList = [];
     console.log(`------------1--------------`);
     const startTime = 9 * 60; // Start time in minutes (9:00 AM)
@@ -691,6 +691,57 @@ module.exports = function (TdDerivatives) {
         callback(null, { list: itemsIndicatorList });
       });
   };
+  TdDerivatives.indicatorTableView = (
+    type,
+    periodicity,
+    period,
+    max,
+    callback
+  ) => {
+    getIntradayData.GetHistory(
+      type,
+      periodicity,
+      period,
+      max,
+      (err, response) => {
+        const itemsIndicatorList=[];
+        if (_.isEmpty(response)) {
+          console.log("error 1");
+        } else {
+          const filedata = [];
+          const prices = [];
+          const closingPrices = [];
+          for (const list of response.OHLC) {
+            filedata.push(list);
+            prices.push(list.OPEN);
+            closingPrices.push(list.CLOSE);
+          }
+          const int1 = calculateRSI(closingPrices);
+          const int2 = implementReversalStrategy(closingPrices);
+          const int3 = implementTradingStrategy(closingPrices);
+          const int4 = implementcalculateCMF(filedata);
+          const int5 = implementcalculateROC(closingPrices);
+          const int6 = implementcalculateADX(filedata);
+          const int7 = implementcalculateAroon(filedata);
+          const int8 = implementTradingStrategy(closingPrices);
+          const int9 = calculateStochasticOscillator(filedata);
+          itemsIndicatorList.push({
+            time: periodicity === 'DAY' ? 'DAY' : period+" "+periodicity,
+            Int1: int1,
+            Int2: int2,
+            Int3: int3,
+            Int4: int4,
+            Int5: int5,
+            Int6: int6,
+            Int7: int7,
+            Int8: int8,
+            Int9: int9,
+          });
+          callback(null, { list: itemsIndicatorList[0] });
+        }
+      }
+    );
+  };
   function calculateRSI(closingPrices) {
     // Calculate the average of the upward price changes
     let avgUpwardChange = 0;
@@ -764,7 +815,7 @@ module.exports = function (TdDerivatives) {
       const CLOSE = data[i].CLOSE;
       const HIGH = data[i].HIGH;
       const LOW = data[i].LOW;
-      const volume = data[i].VALUE;
+      const volume = data[i].CLOSE*data[i].TRADEDQTY;
       const moneyFLOWMultiplier = (CLOSE - LOW - (HIGH - CLOSE)) / (HIGH - LOW);
       const moneyFLOWVolume = moneyFLOWMultiplier * volume;
       sumVolume += volume;

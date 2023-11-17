@@ -204,6 +204,40 @@
                     "verb": "get"
                 }
             ]
+        },
+        "indicatorTableView": {
+            "accepts": [
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "required": true
+                },{
+                    "arg": "periodicity",
+                    "type": "string",
+                    "required": true
+                },
+                {
+                    "arg": "period",
+                    "type": "Number"
+                },
+                {
+                    "arg": "max",
+                    "type": "Number",
+                    "required": true
+                }
+            ],
+            "returns": {
+                "type": "object",
+                "arg": "response",
+                "root": true
+            },
+            "description": "",
+            "http": [
+                {
+                    "path": "/indicatorTableView",
+                    "verb": "get"
+                }
+            ]
         }
     }
 }
