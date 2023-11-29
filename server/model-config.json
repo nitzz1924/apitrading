@@ -51,8 +51,16 @@
   "TdPublicList": {
     "dataSource": "mongoDB",
     "public": true
-  },
+  }, 
   "TdDerivatives": {
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "TdPlan":{
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "TdPaymentList":{
     "dataSource": "mongoDB",
     "public": true
   }

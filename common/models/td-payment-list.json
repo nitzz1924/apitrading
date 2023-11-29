@@ -1,0 +1,69 @@
+{
+  "name": "TdPaymentList",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "userId": {
+      "type": "string",
+      "required": true
+    },
+    "username": {
+      "type": "string",
+      "required": true
+    },
+    "payType": {
+      "type": "string"
+    },
+    "gateway": {
+      "type": "string",
+      "default": "razorpay"
+    },
+    "referenceId": {
+      "type": "string",
+      "required": true
+    },
+    "payamount": {
+      "type": "number"
+    },
+    "discount": {
+        "type": "number"
+    },
+    "transactionId": {
+      "type": "number"
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "updateAt": {
+        "type": "date",
+        "defaultFn": "now"
+      }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}

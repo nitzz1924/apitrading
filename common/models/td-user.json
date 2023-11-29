@@ -45,6 +45,16 @@
     "codeCreatedAt": {
       "type": "date"
     },
+    "planId": {
+      "type": "string",
+      "default": "I"
+    },
+    "expairyDate": {
+      "type": "date"
+    },
+    "endDate": {
+      "type": "date"
+    },
     "status": {
       "type": "string",
       "default": "I"
