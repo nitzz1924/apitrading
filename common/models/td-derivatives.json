@@ -1,243 +1,280 @@
 {
-    "name": "TdDerivatives",
-    "base": "PersistedModel",
-    "idInjection": true,
-    "options": {
-        "validateUpsert": true
+  "name": "TdDerivatives",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now",
+      "data": "2023-11-02T06:39:09.101Z"
     },
-    "properties": {
-        "createdAt": {
-            "type": "date",
-            "defaultFn": "now",
-            "data":"2023-11-02T06:39:09.101Z"
-        },
-        "timeUpdate": {
-            "type": "number"
-        }
-    },
-    "validations": [],
-    "relations": {},
-    "acls": [],
-    "methods": {
-        "strikeprice": {
-            "accepts": [
-                {
-                    "arg": "type",
-                    "type": "string",
-                    "required": true
-                }
-            ],
-            "returns": {
-                "type": "object",
-                "arg": "response",
-                "root": true
-            },
-            "description": "",
-            "http": [
-                {
-                    "path": "/strikeprice",
-                    "verb": "get"
-                }
-            ]
-        },
-        "productexpirydate": {
-            "accepts": [
-                {
-                    "arg": "type",
-                    "type": "string",
-                    "required": true
-                }
-            ],
-            "returns": {
-                "type": "object",
-                "arg": "response",
-                "root": true
-            },
-            "description": "",
-            "http": [
-                {
-                    "path": "/productexpirydate",
-                    "verb": "get"
-                }
-            ]
-        },
-        "optiondata": {
-            "accepts": [
-                {
-                    "arg": "type",
-                    "type": "string",
-                    "required": true
-                },
-                {
-                    "arg": "expairdate",
-                    "type": "string",
-                    "required": true
-                },
-                {
-                    "arg": "strickPrice",
-                    "type": "number",
-                    "required": true
-                }
-            ],
-            "returns": {
-                "type": "object",
-                "arg": "response",
-                "root": true
-            },
-            "description": "",
-            "http": [
-                {
-                    "path": "/optiondata",
-                    "verb": "get"
-                }
-            ]
-        },
-        "getdataIntra": {
-            "accepts": [
-                {
-                    "arg": "type",
-                    "type": "string",
-                    "required": true
-                }
-            ],
-            "returns": {
-                "type": "object",
-                "arg": "response",
-                "root": true
-            },
-            "description": "",
-            "http": [
-                {
-                    "path": "/getdataIntra",
-                    "verb": "get"
-                }
-            ]
-        },
-        "getProductList": {
-            "accepts": [],
-            "returns": {
-                "type": "object",
-                "arg": "response",
-                "root": true
-            },
-            "description": "",
-            "http": [
-                {
-                    "path": "/getProducts",
-                    "verb": "get"
-                }
-            ]
-        },
-        "getOptionDataList": {
-            "accepts": [
-                {
-                    "arg": "type",
-                    "type": "string",
-                    "required": true
-                },
-                {
-                    "arg": "expairdate",
-                    "type": "string",
-                    "required": true
-                }
-            ],
-            "returns": {
-                "type": "object",
-                "arg": "response",
-                "root": true
-            },
-            "description": "",
-            "http": [
-                {
-                    "path": "/getOptionDataList",
-                    "verb": "get"
-                }
-            ]
-        },
-        "getDerivativesData": {
-            "accepts": [
-                {
-                    "arg": "type",
-                    "type": "string",
-                    "required": true
-                },
-                {
-                    "arg": "time",
-                    "type": "number",
-                    "required": true
-                }
-            ],
-            "returns": {
-                "type": "object",
-                "arg": "response",
-                "root": true
-            },
-            "description": "",
-            "http": [
-                {
-                    "path": "/getDerivativesData",
-                    "verb": "get"
-                }
-            ]
-        },
-        "indicatorView": {
-            "accepts": [
-                {
-                    "arg": "type",
-                    "type": "string",
-                    "required": true
-                },{
-                    "arg": "time",
-                    "type": "Number",
-                    "required": true
-                }
-            ],
-            "returns": {
-                "type": "object",
-                "arg": "response",
-                "root": true
-            },
-            "description": "",
-            "http": [
-                {
-                    "path": "/indicatorView",
-                    "verb": "get"
-                }
-            ]
-        },
-        "indicatorTableView": {
-            "accepts": [
-                {
-                    "arg": "type",
-                    "type": "string",
-                    "required": true
-                },{
-                    "arg": "periodicity",
-                    "type": "string",
-                    "required": true
-                },
-                {
-                    "arg": "period",
-                    "type": "Number"
-                },
-                {
-                    "arg": "max",
-                    "type": "Number",
-                    "required": true
-                }
-            ],
-            "returns": {
-                "type": "object",
-                "arg": "response",
-                "root": true
-            },
-            "description": "",
-            "http": [
-                {
-                    "path": "/indicatorTableView",
-                    "verb": "get"
-                }
-            ]
-        }
+    "timeUpdate": {
+      "type": "number"
     }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {
+    "strikeprice": {
+      "accepts": [
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/strikeprice",
+          "verb": "get"
+        }
+      ]
+    },
+    "productexpirydate": {
+      "accepts": [
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/productexpirydate",
+          "verb": "get"
+        }
+      ]
+    },
+    "optiondata": {
+      "accepts": [
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "expairdate",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "strickPrice",
+          "type": "number",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/optiondata",
+          "verb": "get"
+        }
+      ]
+    },
+    "getdataIntra": {
+      "accepts": [
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getdataIntra",
+          "verb": "get"
+        }
+      ]
+    },
+    "getProductList": {
+      "accepts": [],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getProducts",
+          "verb": "get"
+        }
+      ]
+    },
+    "getOptionDataList": {
+      "accepts": [
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "expairdate",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getOptionDataList",
+          "verb": "get"
+        }
+      ]
+    },
+    "getDerivativesData": {
+      "accepts": [
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "time",
+          "type": "number",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getDerivativesData",
+          "verb": "get"
+        }
+      ]
+    },
+    "indicatorView": {
+      "accepts": [
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "time",
+          "type": "Number",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/indicatorView",
+          "verb": "get"
+        }
+      ]
+    },
+    "indicatorTableView": {
+      "accepts": [
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "periodicity",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "period",
+          "type": "Number"
+        },
+        {
+          "arg": "max",
+          "type": "Number",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/indicatorTableView",
+          "verb": "get"
+        }
+      ]
+    },
+    "getHistoryData": {
+      "accepts": [
+        {
+          "arg": "periodicity",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "max",
+          "type": "Number",
+          "required": true
+        },
+        {
+          "arg": "period",
+          "type": "Number"
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getHistoryData",
+          "verb": "get"
+        }
+      ]
+    }
+  }
 }

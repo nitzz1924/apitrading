@@ -32,9 +32,7 @@
           "url": "http://nimblerest.lisuns.com:4531/GetLastQuote/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO&instrumentIdentifier={type}-I"
         },
         "functions": {
-          "getcurrentIntraday": [
-            "type"
-          ]
+          "getcurrentIntraday": ["type"]
         }
       },
       {
@@ -43,22 +41,16 @@
           "url": "http://nimblerest.lisuns.com:4531/GetProducts/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO"
         },
         "functions": {
-          "getProductList": [
-          ]
+          "getProductList": []
         }
       },
       {
         "template": {
           "method": "GET",
-          "url": "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO&instrumentIdentifier={type}-I&periodicity={periodicity}&max={max}&period={period}"
+          "url": "http://nimblerest.lisuns.com:4531/GetHistory/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO&instrumentIdentifier={type}&periodicity={periodicity}&max={max}&period={period}"
         },
         "functions": {
-          "GetHistory": [
-            "type",
-            "periodicity",
-            "max",
-            "period"
-          ]
+          "GetHistory": ["periodicity", "type", "max", "period"]
         }
       }
     ]
@@ -78,9 +70,7 @@
           "url": "http://nimblerest.lisuns.com:4531/GetExpiryDates/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO&product={type}"
         },
         "functions": {
-          "getOptionExpiryDates": [
-            "type"
-          ]
+          "getOptionExpiryDates": ["type"]
         }
       }
     ]
@@ -100,10 +90,7 @@
           "url": "http://nimblerest.lisuns.com:4531/GetLastQuoteOptionChain/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO&product={type}&expiry={expirydate}"
         },
         "functions": {
-          "getOptionDataToday": [
-            "type",
-            "expirydate"
-          ]
+          "getOptionDataToday": ["type", "expirydate"]
         }
       }
     ]
@@ -124,9 +111,7 @@
           "url": "http://nimblerest.lisuns.com:4531/GetLastQuote/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO&instrumentIdentifier={type}-I"
         },
         "functions": {
-          "getcurrentIntraday": [
-            "type"
-          ]
+          "getcurrentIntraday": ["type"]
         }
       },
       {
@@ -135,9 +120,7 @@
           "url": "http://nimblerest.lisuns.com:4531/GetExpiryDates/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO&product={type}"
         },
         "functions": {
-          "getOptionExpiryDates": [
-            "type"
-          ]
+          "getOptionExpiryDates": ["type"]
         }
       },
       {
@@ -146,10 +129,7 @@
           "url": "http://nimblerest.lisuns.com:4531/GetLastQuoteOptionChain/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO&product={type}&expiry={expirydate}"
         },
         "functions": {
-          "getOptionDataToday": [
-            "type",
-            "expirydate"
-          ]
+          "getOptionDataToday": ["type", "expirydate"]
         }
       },
       {
@@ -158,8 +138,7 @@
           "url": "http://nimblerest.lisuns.com:4531/GetProducts/?accessKey=988dcf72-de6b-4637-9af7-fddbe9bfa7cd&exchange=NFO"
         },
         "functions": {
-          "getProductList": [
-          ]
+          "getProductList": []
         }
       }
     ]

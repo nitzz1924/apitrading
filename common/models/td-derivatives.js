@@ -704,7 +704,7 @@ module.exports = function (TdDerivatives) {
       period,
       max,
       (err, response) => {
-        const itemsIndicatorList=[];
+        const itemsIndicatorList = [];
         if (_.isEmpty(response)) {
           console.log("error 1");
         } else {
@@ -726,7 +726,7 @@ module.exports = function (TdDerivatives) {
           const int8 = implementTradingStrategy(closingPrices);
           const int9 = calculateStochasticOscillator(filedata);
           itemsIndicatorList.push({
-            time: periodicity === 'DAY' ? 'DAY' : period+" "+periodicity,
+            time: periodicity === "DAY" ? "DAY" : period + " " + periodicity,
             Int1: int1,
             Int2: int2,
             Int3: int3,
@@ -815,7 +815,7 @@ module.exports = function (TdDerivatives) {
       const CLOSE = data[i].CLOSE;
       const HIGH = data[i].HIGH;
       const LOW = data[i].LOW;
-      const volume = data[i].CLOSE*data[i].TRADEDQTY;
+      const volume = data[i].CLOSE * data[i].TRADEDQTY;
       const moneyFLOWMultiplier = (CLOSE - LOW - (HIGH - CLOSE)) / (HIGH - LOW);
       const moneyFLOWVolume = moneyFLOWMultiplier * volume;
       sumVolume += volume;
@@ -1009,5 +1009,21 @@ module.exports = function (TdDerivatives) {
     } else {
       return "DN";
     }
+  };
+  TdDerivatives.getHistoryData = (periodicity,type,max,period, callback) => {
+    getIntradayData.GetHistory(
+      periodicity,
+      type,
+      max,
+      period,
+      (err, response) => {
+        if (_.isEmpty(response)) {
+          console.log("error 1");
+        } else {
+          //console.log(response);
+          callback(null, { list: response.OHLC });
+        }
+      }
+    );
   };
 };
