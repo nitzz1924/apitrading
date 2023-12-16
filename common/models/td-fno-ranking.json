@@ -1,0 +1,53 @@
+{
+  "name": "TdFnoRanking",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now",
+      "data": "2023-11-02T06:39:09.101Z"
+    },
+    "list": {
+      "type": "array"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {
+    "getNiftyRankingTime": {
+      "accepts": [],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getNiftyRankingTime",
+          "verb": "get"
+        }
+      ]
+    },
+    "getNiftyRanking": {
+      "accepts": [],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getNiftyRanking",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

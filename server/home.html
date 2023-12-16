@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Button with Icon CSS Example</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+  <style>
+    /* Default styles for buttons */
+    button {
+      padding: 10px;
+      margin: 5px;
+      position: relative; /* Ensure proper positioning for pseudo-element */
+    }
+
+    /* Icon styles */
+    button::before {
+      content: '\f055'; /* Unicode character for Font Awesome icon (fa-flag) */
+      font-family: 'Font Awesome 5 Free';
+      font-weight: 900;
+      margin-right: 5px; /* Adjust the spacing between the icon and text */
+    }
+
+    /* Additional styles for buttons with specific text content */
+    button.special::before {
+      color: red; /* Change the color of the icon for special buttons */
+    }
+  </style>
+</head>
+<body>
+
+  <button onclick="checkButtonText(this)">Click me</button>
+  <button class="special" onclick="checkButtonText(this)">Special Button</button>
+
+  <script>
+    function checkButtonText(button) {
+      // Your logic goes here
+    }
+  </script>
+
+</body>
+</html>
