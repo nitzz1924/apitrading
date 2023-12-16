@@ -63,5 +63,9 @@
   "TdPaymentList":{
     "dataSource": "mongoDB",
     "public": true
+  },
+  "TdFnoRanking":{
+    "dataSource": "mongoDB",
+    "public": true
   }
 }
