@@ -275,21 +275,6 @@
           "verb": "get"
         }
       ]
-    },
-    "getNiftyRanking": {
-      "accepts": [],
-      "returns": {
-        "type": "object",
-        "arg": "response",
-        "root": true
-      },
-      "description": "",
-      "http": [
-        {
-          "path": "/getNiftyRanking",
-          "verb": "get"
-        }
-      ]
     }
   }
 }

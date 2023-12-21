@@ -5,62 +5,69 @@ const cron = require("node-cron");
 module.exports = function (TdFnoRanking) {
   var getIntradayData = app.datasources.getIntradayData;
   TdFnoRanking.getNiftyRanking = (callback) => {
+    const timeHistory = [];
     getIntradayData.getProductList(async (err, responseType) => {
       if (!_.isEmpty(responseType)) {
-        const timeHistory = [];
+        console.log(responseType);
         async function fetchData() {
           const listTime = ["MINUTE", "HOUR", "DAY", "WEEK", "MONTH"];
-
-          await Promise.all(
-            responseType.PRODUCTS.slice(16).map(async (type) => {
-              try {
-                const responses = await Promise.all(
-                  listTime.map(async (timing) => {
-                    try {
-                      return await new Promise((resolve) => {
-                        getIntradayData.GetHistory(
-                          timing,
-                          type + "-I",
-                          10,
-                          1,
-                          (err, data) => {
-                            resolve(data);
-                          }
+          if (!_.isEmpty(responseType) && responseType.PRODUCTS) {
+            await Promise.all(
+              responseType.PRODUCTS.slice(16).map(async (type) => {
+                try {
+                  const responses = await Promise.all(
+                    listTime.map(async (timing) => {
+                      try {
+                        return await new Promise((resolve) => {
+                          getIntradayData.GetHistory(
+                            timing,
+                            type + "-I",
+                            10,
+                            1,
+                            (err, data) => {
+                              resolve(data);
+                            }
+                          );
+                        });
+                      } catch (error) {
+                        console.log(
+                          `Error fetching history for ${type} - ${timing}:`,
+                          error
                         );
-                      });
-                    } catch (error) {
+                        return null; // or handle the error accordingly
+                      }
+                    })
+                  );
+
+                  responses.forEach((response2, index) => {
+                    if (_.isEmpty(response2)) {
                       console.log(
-                        `Error fetching history for ${type} - ${timing}:`,
-                        error
+                        `Error: Empty response2 for ${type} - ${listTime[index]}`
                       );
-                      return null; // or handle the error accordingly
+                    } else {
+                      const labelAverage = calculateLabelAverage(
+                        response2.OHLC
+                      );
+                      timeHistory.push({
+                        ...labelAverage,
+                        type,
+                        timing: listTime[index],
+                      });
                     }
-                  })
-                );
-
-                responses.forEach((response2, index) => {
-                  if (_.isEmpty(response2)) {
-                    console.log(
-                      `Error: Empty response2 for ${type} - ${listTime[index]}`
-                    );
-                  } else {
-                    const labelAverage = calculateLabelAverage(response2.OHLC);
-                    timeHistory.push({
-                      ...labelAverage,
-                      type,
-                      timing: listTime[index],
-                    });
-                  }
-                });
-              } catch (error) {
-                console.log(`Error fetching data for ${type}:`, error);
-              }
-            })
-          );
-          const dataarry = compareAndCreateRanking(timeHistory);
-          callback(null, { list: dataarry });
+                  });
+                } catch (error) {
+                  console.log(`Error fetching data for ${type}:`, error);
+                }
+              })
+            );
+            const dataarry = compareAndCreateRanking(timeHistory);
+          } else {
+            console.log(
+              "Error: PRODUCTS is undefined or empty in the response."
+            );
+            callback("Error: PRODUCTS is undefined or empty in the response.");
+          }
         }
-
         function calculateLabelAverage(OHLC) {
           const labelSum = OHLC.reduce(
             (sum, calculate) => {
@@ -86,15 +93,15 @@ module.exports = function (TdFnoRanking) {
 
           const labelAverage = {};
           Object.keys(labelSum).forEach((key) => {
-            labelAverage[key] = labelSum[key] / OHLC.length
+            labelAverage[key] = labelSum[key] / OHLC.length;
           });
 
           return labelAverage;
         }
-
         fetchData();
       }
     });
+    callback(null, { list: dataarry });
   };
   function compareAndCreateRanking(data) {
     const rankings = [];
@@ -118,60 +125,44 @@ module.exports = function (TdFnoRanking) {
 
     return rankings;
   }
-  TdFnoRanking.getNiftyRankingTime = (callback) => {
-     getIntradayData.getProductList(async (err, responseType) => {
+  TdFnoRanking.getNiftyRankingTime = (duration, callback) => {
+    getIntradayData.getProductList(async (err, responseType) => {
       if (!_.isEmpty(responseType)) {
-        const timeHistory = [];
         async function fetchData() {
-          const listTime = ["MINUTE", "HOUR", "DAY", "WEEK", "MONTH"];
-
-          await Promise.all(
+          const timeHistory = await Promise.all(
             responseType.PRODUCTS.slice(16).map(async (type) => {
               try {
-                const responses = await Promise.all(
-                  listTime.map(async (timing) => {
-                    try {
-                      return await new Promise((resolve) => {
-                        getIntradayData.GetHistory(
-                          timing,
-                          type + "-I",
-                          10,
-                          1,
-                          (err, data) => {
-                            resolve(data);
-                          }
-                        );
-                      });
-                    } catch (error) {
-                      console.log(
-                        `Error fetching history for ${type} - ${timing}:`,
-                        error
-                      );
-                      return null; // or handle the error accordingly
+                const data = await new Promise((resolve, reject) => {
+                  getIntradayData.GetHistory(
+                    duration,
+                    type + "-I",
+                    5,
+                    1,
+                    (err, data) => {
+                      if (err || _.isEmpty(data)) {
+                        console.log(`Error: Empty response for ${type}`, err);
+                        reject(err);
+                      } else {
+                        resolve(data);
+                      }
                     }
-                  })
-                );
-
-                responses.forEach((response2, index) => {
-                  if (_.isEmpty(response2)) {
-                    console.log(
-                      `Error: Empty response2 for ${type} - ${listTime[index]}`
-                    );
-                  } else {
-                    const labelAverage = calculateLabelAverage(response2.OHLC);
-                    timeHistory.push({
-                      ...labelAverage,
-                      type,
-                      timing: listTime[index],
-                    });
-                  }
+                  );
                 });
+
+                const labelAverage = calculateLabelAverage(data.OHLC);
+                return {
+                  ...labelAverage,
+                  type,
+                  timing: duration,
+                };
               } catch (error) {
-                console.log(`Error fetching data for ${type}:`, error);
+                console.log(`Error fetching history for ${type}`, error);
+                return null; // or handle the error accordingly
               }
             })
           );
-          callback(null, { list: timeHistory });
+
+          callback(null, timeHistory.filter(Boolean));
         }
 
         function calculateLabelAverage(OHLC) {
@@ -199,7 +190,7 @@ module.exports = function (TdFnoRanking) {
 
           const labelAverage = {};
           Object.keys(labelSum).forEach((key) => {
-            labelAverage[key] = labelSum[key] / OHLC.length
+            labelAverage[key] = labelSum[key] / OHLC.length;
           });
 
           return labelAverage;

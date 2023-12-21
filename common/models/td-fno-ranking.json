@@ -20,7 +20,13 @@
   "acls": [],
   "methods": {
     "getNiftyRankingTime": {
-      "accepts": [],
+      "accepts": [
+        {
+          "arg": "duration",
+          "type": "string",
+          "required": true
+        }
+      ],
       "returns": {
         "type": "object",
         "arg": "response",
