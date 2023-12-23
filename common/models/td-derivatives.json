@@ -275,6 +275,36 @@
           "verb": "get"
         }
       ]
+    },
+    "getProductListData": {
+      "accepts": [],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getProductListData",
+          "verb": "get"
+        }
+      ]
+    },
+    "getProductListOption": {
+      "accepts": [],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getProductListOption",
+          "verb": "get"
+        }
+      ]
     }
   }
 }

@@ -6,6 +6,7 @@ const _ = require("lodash");
 const cron = require("node-cron");
 const moment = require("moment-timezone");
 const currentTime = moment().tz("Asia/Kolkata");
+const { Op } = require("sequelize");
 module.exports = function (TdDerivatives) {
   var getIntradayData = app.dataSources.getIntradayData;
   var getOptionExpiry = app.dataSources.getOptionExpiry;
@@ -1025,5 +1026,64 @@ module.exports = function (TdDerivatives) {
         }
       }
     );
+  };
+  TdDerivatives.getProductListData = (callback) => {
+    const dataList = [];
+    getIntradayData.getProductList(async (err, responseType) => {
+      if (!_.isEmpty(responseType)) {
+        // Use Promise.all to wait for all findOne promises to resolve
+        const promises = responseType.PRODUCTS.slice(16).map((type) => {
+          return TdDerivatives.findOne({
+            where: {
+              INSTRUMENTIDENTIFIER: `${type}-I`,
+            },
+            limit: 1,
+            order: "id desc",
+          })
+            .then((result) => {
+              if (!_.isEmpty(result)) {
+                return result;
+              }
+            })
+            .catch((e) => {
+              console.error(e);
+            });
+        });
+        // Wait for all promises to resolve before calling the callback
+        const resolvedDataList = await Promise.all(promises);
+
+        // Filter out any undefined values
+        const filteredDataList = resolvedDataList.filter(
+          (result) => result !== undefined
+        );
+
+        // Call the callback after all promises have resolved
+        callback(null, filteredDataList);
+      } else {
+        // If responseType is empty, call the callback with an empty array
+        callback(null, dataList);
+      }
+    });
+  };
+  TdDerivatives.getProductListOption = async (callback) => {
+    const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
+    try {
+      // Use Promise.all to wait for all findOne promises to resolve
+      const promises = await Promise.all(
+        listType.map(async (type) => {
+          return TdDerivatives.findOne({
+            where: {
+              INSTRUMENTIDENTIFIER: `${type}-I`,
+            },
+            limit: 1,
+            order: "id desc",
+          });
+        })
+      );
+      const resolvedDataList = await Promise.all(promises);
+      callback(null, resolvedDataList);
+    } catch (error) {
+      console.error(error);
+    }
   };
 };
