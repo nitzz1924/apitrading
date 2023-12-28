@@ -1086,4 +1086,95 @@ module.exports = function (TdDerivatives) {
       console.error(error);
     }
   };
+  TdDerivatives.getFnoRanking = async () => {
+    const dataListTime = {};
+    const listTime = ["MINUTE", "HOUR", "DAY", "WEEK", "MONTH"];
+
+    try {
+      const responseType = await new Promise((resolve, reject) => {
+        getIntradayData.getProductList((err, response) => {
+          if (err) reject(err);
+          else resolve(response);
+        });
+      });
+
+      if (_.isEmpty(responseType)) {
+        return { dataListTime };
+      }
+
+      const promises = responseType.PRODUCTS.slice(16).map(async (type) => {
+        const filterPromises = listTime.map(async (timing) => {
+          const filter = getFilter(timing, type);
+          try {
+            const result = await TdDerivatives.find(filter);
+            if (!_.isEmpty(result)) {
+              // Update existing data or create a new array
+              dataListTime[timing] = dataListTime[timing] || [];
+              dataListTime[timing] = dataListTime[timing].concat(result);
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        });
+        return Promise.all(filterPromises);
+      });
+
+      await Promise.all(promises);
+
+      // Sort the data by PRICECHANGEPERCENTAGE
+      Object.keys(dataListTime).forEach((timing) => {
+        dataListTime[timing] = dataListTime[timing].sort((a, b) => {
+          return b.PRICECHANGEPERCENTAGE - a.PRICECHANGEPERCENTAGE;
+        });
+      });
+
+      return { dataListTime };
+    } catch (error) {
+      console.error(error);
+      return { dataListTime };
+    }
+  };
+
+  function getFilter(timing, type) {
+    const currentDate = new Date();
+    const filter = {
+      where: {
+        INSTRUMENTIDENTIFIER: `${type}-I`,
+      },
+      limit: 1,
+      order: "id asc",
+    };
+    if (timing === "MINUTE") {
+      // Handle minute filter if needed
+    } else if (timing === "HOUR") {
+      setHourlyFilter(filter, currentDate, 1);
+    } else if (timing === "DAY") {
+      setDailyFilter(filter, currentDate, 1);
+    } else if (timing === "WEEK") {
+      setDailyFilter(filter, currentDate, 5);
+    } else if (timing === "MONTH") {
+      setDailyFilter(filter, currentDate, 30);
+    }
+    return filter;
+  }
+  function setHourlyFilter(filter, currentDate, hoursAgo) {
+    const startOfRange = new Date(currentDate);
+    startOfRange.setHours(startOfRange.getHours() - hoursAgo);
+    filter.where.and = [
+      { createdAt: { gte: startOfRange } },
+      { createdAt: { lte: currentDate } },
+    ];
+  }
+  function setDailyFilter(filter, currentDate, daysAgo) {
+    const startOfRange = new Date(currentDate);
+    startOfRange.setDate(startOfRange.getDate() - daysAgo);
+    startOfRange.setHours(9, 0, 0, 0);
+    const endOfRange = new Date(currentDate);
+    endOfRange.setDate(endOfRange.getDate() - daysAgo);
+    endOfRange.setHours(15, 59, 59, 999);
+    filter.where.and = [
+      { createdAt: { gte: startOfRange } },
+      { createdAt: { lte: endOfRange } },
+    ];
+  }
 };

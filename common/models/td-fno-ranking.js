@@ -56,7 +56,7 @@ module.exports = function (TdFnoRanking) {
             })
           );
           const dataarry = compareAndCreateRanking(timeHistory);
-          callback(null, { list: timeHistory });
+          callback(null, { list: dataarry });
         } catch (error) {
           console.log("Error:", error);
           callback(error, null);
@@ -67,7 +67,6 @@ module.exports = function (TdFnoRanking) {
       }
     });
   };
-
   function calculateLabelAverage(OHLC) {
     const labelSum = OHLC.reduce(
       (sum, calculate) => {
@@ -98,15 +97,13 @@ module.exports = function (TdFnoRanking) {
 
     return labelAverage;
   }
-
   function compareAndCreateRanking(data) {
     const rankings = [];
     const timings = ["MINUTE", "HOUR", "DAY", "WEEK", "MONTH"];
-
     for (const timing of timings) {
       const timingData = data.filter((item) => item.timing === timing);
       const sortedData = timingData.sort(
-        (a, b) => b.OPENINTEREST - a.OPENINTEREST
+        (a, b) => ((b.CLOSE - a.OPEN) / a.OPEN) * 100
       );
       for (let i = 0; i < sortedData.length; i++) {
         const type = sortedData[i].type;
