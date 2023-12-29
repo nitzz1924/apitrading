@@ -468,6 +468,8 @@ module.exports = function (TdDerivatives) {
       }
     });
   });
+
+
   cron.schedule(scheduleone, async () => {
     const gettime = getTimeCurrent();
     const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
@@ -580,6 +582,9 @@ module.exports = function (TdDerivatives) {
       });
     }
   });
+
+
+
   function getTimeCurrent() {
     let date_ob = new Date();
     // Add 5 hours and 30 minutes
@@ -1091,41 +1096,36 @@ module.exports = function (TdDerivatives) {
     const listTime = ["MINUTE", "HOUR", "DAY", "WEEK", "MONTH"];
 
     try {
-      const responseType = await new Promise((resolve, reject) => {
-        getIntradayData.getProductList((err, response) => {
-          if (err) reject(err);
-          else resolve(response);
-        });
-      });
+      const responseType = await getIntradayData.getProductListAsync();
 
-      if (_.isEmpty(responseType)) {
+      if (!responseType || !responseType.PRODUCTS) {
         return { dataListTime };
       }
 
-      const promises = responseType.PRODUCTS.slice(16).map(async (type) => {
-        const filterPromises = listTime.map(async (timing) => {
-          const filter = getFilter(timing, type);
-          try {
-            const result = await TdDerivatives.find(filter);
-            if (!_.isEmpty(result)) {
-              // Update existing data or create a new array
-              dataListTime[timing] = dataListTime[timing] || [];
-              dataListTime[timing] = dataListTime[timing].concat(result);
-            }
-          } catch (e) {
-            console.error(e);
-          }
-        });
-        return Promise.all(filterPromises);
-      });
-
-      await Promise.all(promises);
+      await Promise.all(
+        responseType.PRODUCTS.slice(16).map(async (type) => {
+          await Promise.all(
+            listTime.map(async (timing) => {
+              const filter = getFilter(timing, type);
+              try {
+                const result = await TdDerivatives.find(filter);
+                if (result && result.length > 0) {
+                  dataListTime[timing] = dataListTime[timing] || [];
+                  dataListTime[timing] = dataListTime[timing].concat(result);
+                }
+              } catch (e) {
+                console.error(e);
+              }
+            })
+          );
+        })
+      );
 
       // Sort the data by PRICECHANGEPERCENTAGE
       Object.keys(dataListTime).forEach((timing) => {
-        dataListTime[timing] = dataListTime[timing].sort((a, b) => {
-          return b.PRICECHANGEPERCENTAGE - a.PRICECHANGEPERCENTAGE;
-        });
+        dataListTime[timing] = dataListTime[timing].sort(
+          (a, b) => b.PRICECHANGEPERCENTAGE - a.PRICECHANGEPERCENTAGE
+        );
       });
 
       return { dataListTime };
@@ -1133,6 +1133,16 @@ module.exports = function (TdDerivatives) {
       console.error(error);
       return { dataListTime };
     }
+  };
+
+  // Utility function to promisify getIntradayData.getProductList
+  getIntradayData.getProductListAsync = () => {
+    return new Promise((resolve, reject) => {
+      getIntradayData.getProductList((err, response) => {
+        if (err) reject(err);
+        else resolve(response);
+      });
+    });
   };
 
   function getFilter(timing, type) {
