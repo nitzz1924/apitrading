@@ -20,7 +20,7 @@ module.exports = function (TdFnoRanking) {
                         getIntradayData.GetHistory(
                           timing,
                           type + "-I",
-                          5,
+                          1,
                           1,
                           (err, data) => {
                             resolve(data);
@@ -103,7 +103,7 @@ module.exports = function (TdFnoRanking) {
     for (const timing of timings) {
       const timingData = data.filter((item) => item.timing === timing);
       const sortedData = timingData.sort(
-        (a, b) => ((b.CLOSE - a.OPEN) / a.OPEN) * 100
+        (a, b) => ((b.OPENINTEREST - a.OPENINTEREST) / a.OPENINTEREST) * 100
       );
       for (let i = 0; i < sortedData.length; i++) {
         const type = sortedData[i].type;
