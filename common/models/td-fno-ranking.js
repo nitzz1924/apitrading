@@ -42,9 +42,8 @@ module.exports = function (TdFnoRanking) {
                       `Error: Empty response2 for ${type} - ${listTime[index]}`
                     );
                   } else {
-                    const labelAverage = calculateLabelAverage(response2.OHLC);
                     timeHistory.push({
-                      ...labelAverage,
+                      ...response2.OHLC,
                       type,
                       timing: listTime[index],
                     });
@@ -67,43 +66,13 @@ module.exports = function (TdFnoRanking) {
       }
     });
   };
-  function calculateLabelAverage(OHLC) {
-    const labelSum = OHLC.reduce(
-      (sum, calculate) => {
-        sum.CLOSE += calculate.CLOSE;
-        sum.HIGH += calculate.HIGH;
-        sum.LOW += calculate.LOW;
-        sum.OPEN += calculate.OPEN;
-        sum.OPENINTEREST += calculate.OPENINTEREST;
-        sum.QUOTATIONLOT += calculate.QUOTATIONLOT;
-        sum.TRADEDQTY += calculate.TRADEDQTY;
-        return sum;
-      },
-      {
-        CLOSE: 0,
-        HIGH: 0,
-        LOW: 0,
-        OPEN: 0,
-        OPENINTEREST: 0,
-        QUOTATIONLOT: 0,
-        TRADEDQTY: 0,
-      }
-    );
-
-    const labelAverage = {};
-    Object.keys(labelSum).forEach((key) => {
-      labelAverage[key] = labelSum[key] / OHLC.length;
-    });
-
-    return labelAverage;
-  }
   function compareAndCreateRanking(data) {
     const rankings = [];
     const timings = ["MINUTE", "HOUR", "DAY", "WEEK", "MONTH"];
     for (const timing of timings) {
       const timingData = data.filter((item) => item.timing === timing);
       const sortedData = timingData.sort(
-        (a, b) => ((b.OPENINTEREST - a.OPENINTEREST) / a.OPENINTEREST) * 100
+        (a, b) => b.OPENINTEREST - a.OPENINTEREST
       );
       for (let i = 0; i < sortedData.length; i++) {
         const type = sortedData[i].type;
