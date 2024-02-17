@@ -76,11 +76,6 @@
           "arg": "type",
           "type": "string",
           "required": true
-        },
-        {
-          "arg": "date",
-          "type": "string",
-          "required": true
         }
       ],
       "returns": {
