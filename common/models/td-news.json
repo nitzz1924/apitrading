@@ -1,74 +1,73 @@
 {
-    "name": "TdNews",
-    "base": "PersistedModel",
-    "idInjection": true,
-    "options": {
-      "validateUpsert": true
+  "name": "TdNews",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "title": {
+      "type": "string",
+      "required": true
     },
-    "properties": {
-      "title": {
-        "type": "string",
-        "required": true
-      },
-      "type": {
-        "type": "string",
-        "required": true
-      },
-      "shortDetail": {
-        "type": "string",
-        "required": true
-      },
-      "coverImage": {
-        "type": "string",
-        "required": true
-      },
-      "News": {
-        "type": "string",
-        "required": true
-      },
-      "link": {
-        "type": "string"
-      },
-      "createdAt": {
-        "type": "date",
-        "defaultFn": "now"
-      },
-      "updateAt": {
-        "type": "date",
-        "defaultFn": "now"
-      }
+    "type": {
+      "type": "string",
+      "required": true
     },
-    "validations": [],
-    "relations": {
-        "courseVideo": {
-        "type": "hasMany",
-        "model": "CourseVideo",
-        "foreignKey": "courseId",
-        "options": {
-          "nestRemoting": true
-        }
-      }
+    "description": {
+      "type": "string",
+      "required": true
     },
-    "acls": [
-      {
-        "accessType": "*",
-        "principalType": "ROLE",
-        "principalId": "$everyone",
-        "permission": "ALLOW"
-      },
-      {
-        "accessType": "READ",
-        "principalType": "ROLE",
-        "principalId": "$everyone",
-        "permission": "ALLOW"
-      },
-      {
-        "accessType": "*",
-        "principalType": "ROLE",
-        "principalId": "$authenticated",
-        "permission": "ALLOW"
+    "urlToImage": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string"
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "updateAt": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {
+      "courseVideo": {
+      "type": "hasMany",
+      "model": "CourseVideo",
+      "foreignKey": "courseId",
+      "options": {
+        "nestRemoting": true
       }
-    ],
-    "methods": {}
-  }
-  
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}
