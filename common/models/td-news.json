@@ -40,7 +40,7 @@
   },
   "validations": [],
   "relations": {
-      "courseVideo": {
+    "courseVideo": {
       "type": "hasMany",
       "model": "CourseVideo",
       "foreignKey": "courseId",
@@ -69,5 +69,32 @@
       "permission": "ALLOW"
     }
   ],
-  "methods": {}
+  "methods": {
+    "getNewsData": {
+      "accepts": [
+        {
+          "arg": "type",
+          "type": "string",
+          "required": true
+        },
+        {
+          "arg": "date",
+          "type": "string",
+          "required": true
+        }
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getNewsData",
+          "verb": "get"
+        }
+      ]
+    }
+  }
 }
