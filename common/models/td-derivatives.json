@@ -306,21 +306,6 @@
         }
       ]
     },
-    "getFnoRanking": {
-      "accepts": [],
-      "returns": {
-        "type": "object",
-        "arg": "response",
-        "root": true
-      },
-      "description": "",
-      "http": [
-        {
-          "path": "/getFnoRanking",
-          "verb": "get"
-        }
-      ]
-    },
     "getMultiOptionChain": {
       "accepts": [],
       "returns": {

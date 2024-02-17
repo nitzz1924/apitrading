@@ -1,0 +1,80 @@
+{
+  "name": "TdProduct",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "List": {
+      "type": "array",
+      "required": true
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "updateAt": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "READ",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {
+    "AddProductList": {
+      "accepts": [],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/AddProductList",
+          "verb": "get"
+        }
+      ]
+    },
+    "GetFnoRacking": {
+      "accepts": [{
+        "arg": "time",
+        "type": "string",
+        "required": true
+      }],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/getFnoRacking",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

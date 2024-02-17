@@ -1,0 +1,71 @@
+{
+    "name": "TsStudy",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+      "validateUpsert": true
+    },
+    "properties": {
+      "title": {
+        "type": "string",
+        "required": true
+      },
+      "shortline": {
+        "type": "string",
+        "required": true
+      },
+      "type": {
+        "type": "string",
+        "required": true
+      },
+      "file": {
+        "type": "string",
+        "required": true
+      },
+      "coverImage": {
+        "type": "string",
+        "required": true
+      },
+      "createdAt": {
+        "type": "date",
+        "defaultFn": "now"
+      },
+      "updateAt": {
+        "type": "date",
+        "defaultFn": "now"
+      }
+    },
+    "validations": [],
+    "relations": {
+        "courseVideo": {
+        "type": "hasMany",
+        "model": "CourseVideo",
+        "foreignKey": "courseId",
+        "options": {
+          "nestRemoting": true
+        }
+      }
+    },
+    "acls": [
+      {
+        "accessType": "*",
+        "principalType": "ROLE",
+        "principalId": "$everyone",
+        "permission": "ALLOW"
+      },
+      {
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "$everyone",
+        "permission": "ALLOW"
+      },
+      {
+        "accessType": "*",
+        "principalType": "ROLE",
+        "principalId": "$authenticated",
+        "permission": "ALLOW"
+      }
+    ],
+    "methods": {}
+  }
+  

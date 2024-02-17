@@ -51,20 +51,40 @@
   "TdPublicList": {
     "dataSource": "mongoDB",
     "public": true
-  }, 
+  },
   "TdDerivatives": {
     "dataSource": "mongoDB",
     "public": true
   },
-  "TdPlan":{
+  "TdPlan": {
     "dataSource": "mongoDB",
     "public": true
   },
-  "TdPaymentList":{
+  "TdPaymentList": {
     "dataSource": "mongoDB",
     "public": true
   },
-  "TdFnoRanking":{
+  "TdProduct": {
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "TdCourse": {
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "CourseVideo": {
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "TdChat": {
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "TdNews": {
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "TsStudy": {
     "dataSource": "mongoDB",
     "public": true
   }

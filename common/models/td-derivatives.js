@@ -352,7 +352,6 @@ module.exports = function (TdDerivatives) {
         }
       });
   };
-
   cron.schedule(scheduletwo, async () => {
     const gettime = getTimeCurrent();
     getIntradayData.getProductList((err, response) => {
@@ -473,7 +472,6 @@ module.exports = function (TdDerivatives) {
       }
     });
   });
-
   cron.schedule(scheduleone, async () => {
     const gettime = getTimeCurrent();
     const listType = ["NIFTY", "BANKNIFTY", "FINNIFTY", "MIDCPNIFTY"];
@@ -586,7 +584,6 @@ module.exports = function (TdDerivatives) {
       });
     }
   });
-
   function getTimeCurrent() {
     let date_ob = new Date();
     // Add 5 hours and 30 minutes
@@ -1069,7 +1066,6 @@ module.exports = function (TdDerivatives) {
             25 < type.PRODUCTS.length - i ? 25 : type.PRODUCTS.length - i;
           const group = type.PRODUCTS.slice(i, i + value);
           const result = group.map((symbol) => `${symbol}-I`).join("+");
-
           const promise = new Promise((innerResolve, innerReject) => {
             getIntradayData.GetMultiOptionChain(result, (err, response) => {
               if (err) {
