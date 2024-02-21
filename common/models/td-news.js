@@ -12,7 +12,6 @@ module.exports = function (TdNews) {
                 'User-Agent': 'tradsathi-api/1.0', // Replace 'YourApp/1.0' with your application name and version
             },
         };
-
         request(options, function (error, response, body) {
             const jsonData = JSON.parse(body);
             console.log(JSON.stringify(body));

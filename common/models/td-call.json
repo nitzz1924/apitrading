@@ -1,0 +1,58 @@
+{
+    "name": "TdCall",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+      "validateUpsert": true
+    },
+    "properties": {
+      "option": {
+        "type": "string",
+        "required": true
+      },
+      "value": {
+        "type": "number",
+        "required": true
+      },
+      "time": {
+        "type": "string",
+        "required": true
+      },
+      "imageUrl": {
+        "type": "string",
+        "required": true
+      },
+      "createdAt": {
+        "type": "date",
+        "defaultFn": "now"
+      },
+      "updateAt": {
+        "type": "date",
+        "defaultFn": "now"
+      }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [
+      {
+        "accessType": "*",
+        "principalType": "ROLE",
+        "principalId": "$everyone",
+        "permission": "ALLOW"
+      },
+      {
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "$everyone",
+        "permission": "ALLOW"
+      },
+      {
+        "accessType": "*",
+        "principalType": "ROLE",
+        "principalId": "$authenticated",
+        "permission": "ALLOW"
+      }
+    ],
+    "methods": {}
+  }
+  

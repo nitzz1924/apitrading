@@ -10,6 +10,34 @@
     "connector": "mongodb",
     "localUrl": "mongodb://127.0.0.1:27017/apitrading"
   },
+  "smsService": {
+    "name": "smsService",
+    "headers": {
+      "accepts": "application/json",
+      "content-type": "application/json"
+    },
+    "crud": false,
+    "connector": "rest",
+    "operations": [
+      {
+        "template": {
+          "method": "GET",
+          "url": "http://sms.jaipursmshub.in/api_v2/message/send?api_key=uJXTLH2O_xV_r5utjRB0SEW8rrLBSy9APxqM_sB-KL7bR-_bL8vULpQtBdBMZWKC&sender_id=MTGPSA&dlt_template_id={dlt_template_id}",
+          "query": {
+            "mobile_no": "{mobile_no}",
+            "message": "{message}"
+          }
+        },
+        "functions": {
+          "sendSMS": [
+            "mobile_no",
+            "message",
+            "dlt_template_id"
+          ]
+        }
+      }
+    ]
+  },
   "awsStorage": {
     "name": "awsStorage",
     "connector": "loopback-component-storage",

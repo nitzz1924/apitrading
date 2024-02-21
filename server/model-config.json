@@ -87,5 +87,9 @@
   "TsStudy": {
     "dataSource": "mongoDB",
     "public": true
+  },
+  "TdCall": {
+    "dataSource": "mongoDB",
+    "public": true
   }
 }
