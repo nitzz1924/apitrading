@@ -6,12 +6,16 @@
       "validateUpsert": true
     },
     "properties": {
+      "category": {
+        "type": "string",
+        "required": true
+      },
       "option": {
         "type": "string",
         "required": true
       },
       "value": {
-        "type": "number",
+        "type": "string",
         "required": true
       },
       "time": {
@@ -19,6 +23,30 @@
         "required": true
       },
       "imageUrl": {
+        "type": "string",
+        "required": true
+      },
+      "optionType": {
+        "type": "string",
+        "required": true
+      },
+      "CallType": {
+        "type": "string",
+        "required": true
+      },
+      "strikePrice": {
+        "type": "string",
+        "required": true
+      },
+      "expiryDate": {
+        "type": "string",
+        "required": true
+      },
+      "sValue": {
+        "type": "string",
+        "required": true
+      },
+      "eValue": {
         "type": "string",
         "required": true
       },
