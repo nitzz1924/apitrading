@@ -91,5 +91,9 @@
   "TdCall": {
     "dataSource": "mongoDB",
     "public": true
+  },
+  "TdUniverse": {
+    "dataSource": "mongoDB",
+    "public": true
   }
 }

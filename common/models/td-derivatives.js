@@ -11,8 +11,8 @@ module.exports = function (TdDerivatives) {
   var getIntradayData = app.dataSources.getIntradayData;
   var getOptionExpiry = app.dataSources.getOptionExpiry;
   var getOptionData = app.dataSources.getOptionData;
-  var scheduletwo = "*/30 4-11 * * 1-5";
-  var scheduleone = "*/5 4-11 * * 1-5";
+  var scheduletwo = "#####-*/30 4-11 * * 1-5";
+  var scheduleone = "#####-*/5 4-11 * * 1-5";
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
     request(currenturl, function (error, response, body) {
