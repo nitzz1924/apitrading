@@ -95,5 +95,9 @@
   "TdUniverse": {
     "dataSource": "mongoDB",
     "public": true
+  },
+  "TdNotification": {
+    "dataSource": "mongoDB",
+    "public": true
   }
 }

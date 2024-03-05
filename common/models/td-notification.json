@@ -11,14 +11,17 @@
       "id": true,
       "defaultFn": "guid"
     },
-    "ezUserId": {
+    "tsUserId": {
       "type": "string",
       "default": null
     },
-    "msgSection": {
+    "msgTitle": {
       "type": "string"
     },
     "msgText": {
+      "type": "string"
+    },
+    "images": {
       "type": "string"
     },
     "language": {
@@ -28,7 +31,8 @@
       "type": "date"
     },
     "status": {
-      "type": "string"
+      "type": "string",
+      "default": "U"
     }
   },
   "validations": [],
