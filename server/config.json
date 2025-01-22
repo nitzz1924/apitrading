@@ -26,6 +26,6 @@
     "name": "stock",
     "connector": "http://nimblerest.lisuns.com:4531",
     "provider": "globelapi",
-    "key": "988dcf72-de6b-4637-9af7-fddbe9bfa7cd"
+    "key": "46364d45-3ace-42d0-9a9f-af665c93e36f"
   }
 }
