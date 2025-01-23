@@ -57,7 +57,7 @@
       {
         "template": {
           "method": "GET",
-          "url": "http://nimblerest.lisuns.com:4531/GetLastQuote/?accessKey=46364d45-3ace-42d0-9a9f-af665c93e36f&exchange=NFO&instrumentIdentifier={type}-I"
+          "url": "http://nimblerest.lisuns.com:4531/GetLastQuote/?accessKey=d017b486-b42b-4be7-aad7-48aa748970eb&exchange=NFO&instrumentIdentifier={type}-I"
         },
         "functions": {
           "getcurrentIntraday": [

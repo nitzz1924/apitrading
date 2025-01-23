@@ -30,6 +30,7 @@
     "moment-timezone": "^0.5.32",
     "morgan": "^1.10.0",
     "node-cron": "^3.0.2",
+    "pm2": "^5.4.3",
     "request": "^2.88.2",
     "request-promise-native": "^1.0.9",
     "sequelize": "^6.35.2",
