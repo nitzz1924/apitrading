@@ -6,10 +6,12 @@ const _ = require("lodash");
 const cron = require("node-cron");
 const moment = require("moment-timezone");
 const currentTime = moment().tz("Asia/Kolkata");
+const { Op } = require("sequelize");
 module.exports = function (TdDerivatives) {
   var getIntradayData = app.dataSource.getIntradayData;
   var getOptionExpiry = app.dataSource.getOptionExpiry;
   var getOptionData = app.dataSource.getOptionData;
+  
   var scheduletwo = "*/5 4-11 * * 1-5";
   // var scheduleone = "*/5 10-15 * * 1-5";
   TdDerivatives.strikeprice = (type, callback) => {
