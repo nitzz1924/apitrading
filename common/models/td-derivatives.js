@@ -2,7 +2,6 @@
 const request = require("request");
 const configt = require("../../server/config.json");
 const app = require("../../server/server");
-const indicatorMethods = require("../../utils/method-indicator.js");
 const _ = require("lodash");
 const cron = require("node-cron");
 const moment = require("moment-timezone");
@@ -445,11 +444,9 @@ module.exports = function (TdDerivatives) {
                         time: gettime,
                         timeUpdate: moment(currentTime).unix(),
                       };
-                      const finalData = indicatorMethods.calculateIndicators(datatoday);
-                      console.log("finalData",finalData);
-                      if (!_.isEmpty(finalData)) {
+                      if (!_.isEmpty(datatoday)) {
                         await new Promise((resolve, reject) => {
-                          TdDerivatives.create(finalData, (err, data) => {
+                          TdDerivatives.create(datatoday, (err, data) => {
                             if (err) {
                               console.error(err);
                               reject(err);
