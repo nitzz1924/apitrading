@@ -3,9 +3,8 @@ export const calculateIndicators = (stocks) => {
         const k = 2 / (period + 1);
         return prices.reduce((ema, price, i) => i === 0 ? price : (price * k) + (ema * (1 - k)));
     };
-    return stocks.map((stock, index, arr) => {
-        const prices = arr.slice(0, index + 1).map(s => s.CLOSE);
-        const volumes = arr.slice(0, index + 1).map(s => s.TOTALQTYTRADED);
+        const prices = stocks.slice(0, index + 1).map(s => s.CLOSE);
+        const volumes = stocks.slice(0, index + 1).map(s => s.TOTALQTYTRADED);
         // VWAP Calculation
         const cumulativePriceVolume = prices.reduce((sum, price, i) => sum + price * volumes[i], 0);
         const cumulativeVolume = volumes.reduce((sum, vol) => sum + vol, 0);
@@ -42,5 +41,4 @@ export const calculateIndicators = (stocks) => {
             Stochastic_K: percentK.toFixed(2),
             Volume_Surge: (stock.TOTALQTYTRADED / (volumes.reduce((a, b) => a + b, 0) / volumes.length)).toFixed(2)
         };
-    });
 };
