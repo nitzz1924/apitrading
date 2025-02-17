@@ -12,8 +12,8 @@ module.exports = function (TdDerivatives) {
   var getIntradayData = app.dataSource.getIntradayData;
   var getOptionExpiry = app.dataSource.getOptionExpiry;
   var getOptionData = app.dataSource.getOptionData;
-  var scheduletwo = "*/30 4-11 * * 1-5";
-  var scheduleone = "15-59/5,*/5 10-14,0-30/5 15 * * 1-5";
+  var scheduletwo = "*/5 10-15 * * 1-5";
+  var scheduleone = "*/5 10-15 * * 1-5";
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
     request(currenturl, function (error, response, body) {
@@ -353,7 +353,7 @@ module.exports = function (TdDerivatives) {
         }
       });
   };
-  cron.schedule(scheduleone, async () => {
+  cron.schedule(scheduletwo, async () => {
     const gettime = getTimeCurrent();
     getIntradayData.getProductList((err, response) => {
       if (!_.isEmpty(response)) {
