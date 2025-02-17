@@ -353,7 +353,7 @@ module.exports = function (TdDerivatives) {
         }
       });
   };
-  cron.schedule(scheduletwo, async () => {
+  cron.schedule(scheduleone, async () => {
     const gettime = getTimeCurrent();
     getIntradayData.getProductList((err, response) => {
       if (!_.isEmpty(response)) {
@@ -563,9 +563,10 @@ module.exports = function (TdDerivatives) {
                   time: gettime,
                   timeUpdate: moment(currentTime).unix(),
                 };
-                if (!_.isEmpty(datatoday)) {
+                const finalData = indicatorMethods.calculateIndicators(datatoday);
+                if (!_.isEmpty(finalData)) {
                   await new Promise((resolve, reject) => {
-                    TdDerivatives.create(datatoday, (err, data) => {
+                    TdDerivatives.create(finalData, (err, data) => {
                       if (err) {
                         console.error(err);
                         reject(err);
