@@ -2,6 +2,7 @@
 const request = require("request");
 const configt = require("../../server/config.json");
 const app = require("../../server/server");
+const indicatorMethods = require("../../server/indicatorMethods");
 const _ = require("lodash");
 const cron = require("node-cron");
 const moment = require("moment-timezone");
@@ -437,7 +438,6 @@ module.exports = function (TdDerivatives) {
                         putTotal += putArr[i].OPENINTERESTCHANGE;
                         callTotal += callArr[i].OPENINTERESTCHANGE;
                       }
-
                       const datatoday = {
                         ...currentdata,
                         putTotal,
@@ -446,9 +446,11 @@ module.exports = function (TdDerivatives) {
                         time: gettime,
                         timeUpdate: moment(currentTime).unix(),
                       };
-                      if (!_.isEmpty(datatoday)) {
+                      const finalData = indicatorMethods.calculateIndicators(datatoday);
+                      console.log("finalData",finalData);
+                      if (!_.isEmpty(finalData)) {
                         await new Promise((resolve, reject) => {
-                          TdDerivatives.create(datatoday, (err, data) => {
+                          TdDerivatives.create(finalData, (err, data) => {
                             if (err) {
                               console.error(err);
                               reject(err);
@@ -793,7 +795,7 @@ module.exports = function (TdDerivatives) {
       prices.reduce((sum, price) => sum + price, 0) / prices.length;
     const standardDeviation = Math.sqrt(
       prices.reduce((sum, price) => sum + Math.pow(price - middleBand, 2), 0) /
-        prices.length
+      prices.length
     );
 
     const upperBand = middleBand + multiplier * standardDeviation;
