@@ -180,32 +180,6 @@
         }
       ]
     },
-    "indicatorView": {
-      "accepts": [
-        {
-          "arg": "type",
-          "type": "string",
-          "required": true
-        },
-        {
-          "arg": "time",
-          "type": "Number",
-          "required": true
-        }
-      ],
-      "returns": {
-        "type": "object",
-        "arg": "response",
-        "root": true
-      },
-      "description": "",
-      "http": [
-        {
-          "path": "/indicatorView",
-          "verb": "get"
-        }
-      ]
-    },
     "indicatorTableView": {
       "accepts": [
         {

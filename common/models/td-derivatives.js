@@ -11,7 +11,7 @@ module.exports = function (TdDerivatives) {
   var getIntradayData = app.datasources.getIntradayData;
   var getOptionExpiry = app.datasources.getOptionExpiry;
   var getOptionData = app.datasources.getOptionData;
-  var schedulew = "*/5 4-11 * * 1-5";
+  //var schedulew = "*/5 4-11 * * 1-5";
   var scheduletwo = "*/5 10-15 * * 1-5";
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
@@ -356,9 +356,13 @@ module.exports = function (TdDerivatives) {
     const gettime = getTimeCurrent();
     getIntradayData.getProductList((err, response) => {
       if (!_.isEmpty(response)) {
+        let fiveDay, tenDay, fityDay;
         const listType = response.PRODUCTS;
         if (!_.isEmpty(listType)) {
           for (const type of listType.slice(16)) {
+            fiveDay = getHistoryData(type,1);
+            tenDay = getHistoryData(type,2);
+            fityDay = getHistoryData(type,4);
             getIntradayData.getcurrentIntraday(type, (err, response) => {
               if (_.isEmpty(response)) {
                 console.log("error 1");
@@ -443,6 +447,9 @@ module.exports = function (TdDerivatives) {
                         callTotal,
                         strike,
                         time: gettime,
+                        fiveDay: fiveDay,
+                        tenDay: tenDay,
+                        fityDay: fityDay,
                         timeUpdate: moment(currentTime).unix(),
                       };
                       if (!_.isEmpty(datatoday)) {
@@ -470,6 +477,21 @@ module.exports = function (TdDerivatives) {
         }
       }
     });
+    function getHistoryData(type,week) {
+      getIntradayData.GetHistory(
+        'WEEK',
+        type,
+        1,
+        week,
+        (err, response) => {
+          if (_.isEmpty(response)) {
+            console.log("error 1");
+          } else {
+            return response.OHLC[0]
+          }
+        }
+      );
+    }
   });
   function getTimeCurrent() {
     let date_ob = new Date();
@@ -482,107 +504,6 @@ module.exports = function (TdDerivatives) {
     const minutes = date_ob.getMinutes().toString().padStart(2, "0");
     return hours + ":" + minutes;
   }
-  TdDerivatives.indicatorView = (type, time, callback) => {
-    const itemsIndicatorList = [];
-    console.log(`------------1--------------`);
-    const startTime = 9 * 60; // Start time in minutes (9:00 AM)
-    const endTime = 15 * 60; // End time in minutes (3:00 PM)
-    const increment = time; // Increment in minutes
-    const timesArray = [];
-    if (time === 5 || time === 15 || time === 30) {
-      console.log(`------------2--------------`);
-      for (let minutes = startTime; minutes <= endTime; minutes += increment) {
-        const hour = Math.floor(minutes / 60);
-        const minute = minutes % 60;
-        const formattedTime = `${hour.toString().padStart(2, "0")}:${minute
-          .toString()
-          .padStart(2, "0")}`;
-        timesArray.push(formattedTime);
-      }
-    } else if (time === 1) {
-      console.log(`------------3--------------`);
-      for (let hours = startTime; hours <= endTime; hours += increment) {
-        const hour = Math.floor(hours);
-        const minute = (hours % 1) * 60; // Convert fractional part to minutes
-        const formattedTime = `${hour.toString().padStart(2, "0")}:${minute
-          .toString()
-          .padStart(2, "0")}`;
-        timesArray.push(formattedTime);
-      }
-    } else if (time != 12) {
-      console.log(`------------4--------------`);
-      callback(null, {
-        list: [],
-        message: "Time not currect use 5,15,30,1 for Hour and all day for 12",
-      });
-    }
-    //console.log(timesArray);
-    const currentDate = new Date(); // Create a Date object for the current date
-    const startOfToday = new Date(currentDate); // Clone the current date
-    startOfToday.setHours(0, 0, 0, 0); // Set the time to 00:00:00.000
-    const endOfToday = new Date(currentDate); // Clone the current date
-    endOfToday.setHours(23, 59, 59, 999); // Set the time to 23:59:59.999
-    let filter = {
-      where: {
-        INSTRUMENTIDENTIFIER: `${type}-I`,
-        and: [
-          { createdAt: { gte: startOfToday } },
-          { createdAt: { lte: endOfToday } },
-        ],
-      },
-      order: "id desc",
-    };
-    TdDerivatives.find(filter)
-      .then(JSON.toJSON)
-      .then((data) => {
-        console.log(`------------5--------------`);
-        if (_.isEmpty(data)) {
-          callback(null, { list: [], message: "data is emty" });
-        } else {
-          const filedata = [];
-          const prices = [];
-          const closingPrices = [];
-          for (let v = 0; v < timesArray.length; v++) {
-            for (const list of data) {
-              if (time != 12) {
-                if (list.time === timesArray[v]) {
-                  //console.log(list);
-                  filedata.push(list);
-                  prices.push(list.BUYPRICE);
-                  closingPrices.push(list.SELLPRICE);
-                }
-              } else {
-                filedata.push(list);
-                prices.push(list.BUYPRICE);
-                closingPrices.push(list.SELLPRICE);
-              }
-            }
-          }
-          const int1 = calculateRSI(closingPrices);
-          const int2 = implementReversalStrategy(closingPrices);
-          const int3 = implementTradingStrategy(closingPrices);
-          const int4 = implementcalculateCMF(filedata);
-          const int5 = implementcalculateROC(closingPrices);
-          const int6 = implementcalculateADX(filedata);
-          const int7 = implementcalculateAroon(filedata);
-          const int8 = implementTradingStrategy(closingPrices);
-          const int9 = calculateStochasticOscillator(filedata);
-          itemsIndicatorList.push({
-            time: time === 1 ? "Hour" : time === 12 ? "Day" : time + " MIN",
-            Ind1: int1,
-            Ind2: int2,
-            Int3: int3,
-            Int4: int4,
-            Int5: int5,
-            Int6: int6,
-            Int7: int7,
-            Int8: int8,
-            Int9: int9,
-          });
-        }
-        callback(null, { list: itemsIndicatorList });
-      });
-  };
   TdDerivatives.indicatorTableView = (
     type,
     periodicity,
