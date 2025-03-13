@@ -353,146 +353,130 @@ module.exports = function (TdDerivatives) {
       });
   };
   cron.schedule(scheduletwo, async () => {
-    const gettime = getTimeCurrent();
-    getIntradayData.getProductList((err, response) => {
-      if (!_.isEmpty(response)) {
-        let fiveDay, tenDay, fityDay;
-        const listType = response.PRODUCTS;
-        if (!_.isEmpty(listType)) {
-          for (const type of listType.slice(16)) {
-            fiveDay = getHistoryData(type,1);
-            tenDay = getHistoryData(type,2);
-            fityDay = getHistoryData(type,4);
-            getIntradayData.getcurrentIntraday(type, (err, response) => {
-              if (_.isEmpty(response)) {
-                console.log("error 1");
-              } else {
-                const currentdata = response;
-                const strickPrice = response.AVERAGETRADEDPRICE;
-                // Wrap the whole operation in a Promise to handle the asynchronous calls
-                const processOptionData = async () => {
-                  try {
-                    const responsedate = await new Promise(
-                      (resolve, reject) => {
-                        getOptionExpiry.getOptionExpiryDates(
-                          type,
-                          (err, responsedate) => {
-                            if (_.isEmpty(responsedate)) {
-                              reject("Data not found");
-                            } else {
-                              resolve(responsedate);
-                            }
-                          }
-                        );
-                      }
-                    );
-                    const expirydate = responsedate.EXPIRYDATES[0];
-                    const responseOption = await new Promise(
-                      (resolve, reject) => {
-                        getOptionData.getOptionDataToday(
-                          type,
-                          expirydate,
-                          (err, responseOption) => {
-                            if (_.isEmpty(responseOption)) {
-                              reject("Data not found");
-                            } else {
-                              resolve(responseOption);
-                            }
-                          }
-                        );
-                      }
-                    );
-                    const apiResult = responseOption;
-                    const putArr = [];
-                    const callArr = [];
-                    for (const result of apiResult) {
-                      const identi = result.INSTRUMENTIDENTIFIER.split("_");
-                      const value = parseInt(identi[4]);
-                      if (result.SERVERTIME > 0) {
-                        if (identi[3] === "CE") {
-                          callArr.push({
-                            ...result,
-                            value,
-                            optionType: identi[3],
-                            optionDate: identi[2],
-                          });
-                        } else if (identi[3] === "PE") {
-                          putArr.push({
-                            ...result,
-                            value,
-                            optionType: identi[3],
-                            optionDate: identi[2],
-                          });
-                        }
-                      }
-                    }
-                    const currentOptionStrike = strickPrice;
-                    const result = findClosestItem(
-                      callArr,
-                      currentOptionStrike,
-                      "value"
-                    );
-                    const index = result.index;
-                    const strike = result.nearestValue;
-                    if (index !== -1) {
-                      let putTotal = 0;
-                      let callTotal = 0;
-                      for (let i = index - 5; i < index + 5; i++) {
-                        putTotal += putArr[i].OPENINTERESTCHANGE;
-                        callTotal += callArr[i].OPENINTERESTCHANGE;
-                      }
-                      const datatoday = {
-                        ...currentdata,
-                        putTotal,
-                        callTotal,
-                        strike,
-                        time: gettime,
-                        fiveDay: fiveDay,
-                        tenDay: tenDay,
-                        fityDay: fityDay,
-                        timeUpdate: moment(currentTime).unix(),
-                      };
-                      if (!_.isEmpty(datatoday)) {
-                        await new Promise((resolve, reject) => {
-                          TdDerivatives.create(datatoday, (err, data) => {
-                            if (err) {
-                              console.error(err);
-                              reject(err);
-                            } else {
-                              console.log("Data updated successfully.");
-                              resolve();
-                            }
-                          });
-                        });
-                      }
-                    }
-                  } catch (error) {
-                    console.error("Error:", error);
-                  }
-                };
-                processOptionData();
-              }
-            });
+    try {
+      const gettime = getTimeCurrent();
+      const response = await getProductList();
+  
+      const listType = response?.PRODUCTS || [];
+      if (_.isEmpty(listType)) return;
+  
+      for (const type of listType.slice(16)) {
+        const [fiveDay, twoWeek, fiveWeek] = await Promise.all([
+          getHistoryDataFile(type, 1),
+          getHistoryDataFile(type, 2),
+          getHistoryDataFile(type, 4)
+        ]);
+  
+        const currentdata = await getCurrentIntraday(type);
+        const strickPrice = currentdata.AVERAGETRADEDPRICE;
+  
+        try {
+          const expirydate = await getOptionExpiryDate(type);
+          const responseOption = await getOptionDataToday(type, expirydate);
+  
+          const { callArr, putArr } = processOptions(responseOption);
+          const { index, nearestValue: strike } = findClosestItem(callArr, strickPrice, "value");
+  
+          if (index !== -1) {
+            const { putTotal, callTotal } = calculateOpenInterest(callArr, putArr, index);
+  
+            const datatoday = {
+              ...currentdata,
+              putTotal,
+              callTotal,
+              strike,
+              time: gettime,
+              fiveDay,
+              twoWeek,
+              fiveWeek,
+              timeUpdate: moment().unix(),
+            };
+  
+            if (!_.isEmpty(datatoday)) await saveData(datatoday);
           }
+        } catch (error) {
+          console.error("Processing error:", error);
         }
       }
-    });
-    function getHistoryData(type,week) {
-      getIntradayData.GetHistory(
-        'WEEK',
-        type,
-        1,
-        week,
-        (err, response) => {
-          if (_.isEmpty(response)) {
-            console.log("error 1");
-          } else {
-            return response.OHLC[0]
-          }
-        }
-      );
+    } catch (error) {
+      console.error("Cron job error:", error);
     }
   });
+  async function getProductList() {
+    return new Promise((resolve, reject) => {
+      getIntradayData.getProductList((err, res) => {
+        if (err || _.isEmpty(res)) reject("Product list fetch error");
+        else resolve(res);
+      });
+    });
+  }
+  async function getCurrentIntraday(type) {
+    return new Promise((resolve, reject) => {
+      getIntradayData.getcurrentIntraday(type, (err, res) => {
+        if (err || _.isEmpty(res)) reject("Error fetching current intraday data");
+        else resolve(res);
+      });
+    });
+  }
+  async function getOptionExpiryDate(type) {
+    return new Promise((resolve, reject) => {
+      getOptionExpiry.getOptionExpiryDates(type, (err, res) => {
+        if (err || _.isEmpty(res)) reject("Error fetching option expiry dates");
+        else resolve(res.EXPIRYDATES[0]);
+      });
+    });
+  }
+  async function getOptionDataToday(type, expirydate) {
+    return new Promise((resolve, reject) => {
+      getOptionData.getOptionDataToday(type, expirydate, (err, res) => {
+        if (err || _.isEmpty(res)) reject("Error fetching option data");
+        else resolve(res);
+      });
+    });
+  }
+  function processOptions(responseOption) {
+    const callArr = [], putArr = [];
+    for (const result of responseOption) {
+      const identi = result.INSTRUMENTIDENTIFIER.split("_");
+      const value = parseInt(identi[4]);
+      if (result.SERVERTIME > 0) {
+        if (identi[3] === "CE") callArr.push({ ...result, value, optionType: identi[3], optionDate: identi[2] });
+        else if (identi[3] === "PE") putArr.push({ ...result, value, optionType: identi[3], optionDate: identi[2] });
+      }
+    }
+    return { callArr, putArr };
+  }
+  
+  function calculateOpenInterest(callArr, putArr, index) {
+    let putTotal = 0, callTotal = 0;
+    for (let i = Math.max(index - 5, 0); i < Math.min(index + 5, putArr.length, callArr.length); i++) {
+      putTotal += putArr[i]?.OPENINTERESTCHANGE || 0;
+      callTotal += callArr[i]?.OPENINTERESTCHANGE || 0;
+    }
+    return { putTotal, callTotal };
+  }
+  
+  async function saveData(datatoday) {
+    return new Promise((resolve, reject) => {
+      TdDerivatives.create(datatoday, (err) => {
+        if (err) reject(err);
+        else {
+          console.log("Data updated successfully.");
+          resolve();
+        }
+      });
+    });
+  }
+  
+  async function getHistoryDataFile(type, week) {
+    return new Promise((resolve, reject) => {
+      getIntradayData.GetHistory('WEEK', `${type}-I`, 1, week, (err, response) => {
+        if (err || _.isEmpty(response)) reject("Error fetching history data");
+        else resolve(response.OHLC[0]);
+      });
+    });
+  }
+  
   function getTimeCurrent() {
     let date_ob = new Date();
     // Add 5 hours and 30 minutes
@@ -825,15 +809,14 @@ module.exports = function (TdDerivatives) {
   };
   TdDerivatives.getHistoryData = (periodicity, type, max, period, callback) => {
     getIntradayData.GetHistory(
-      periodicity,
-      type,
-      max,
-      period,
+      'WEEK',
+      `${type}-I`,
+      1,
+      week,
       (err, response) => {
         if (_.isEmpty(response)) {
           console.log("error 1");
         } else {
-          //console.log(response);
           callback(null, { list: response.OHLC });
         }
       }
