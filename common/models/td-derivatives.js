@@ -7,6 +7,7 @@ const cron = require("node-cron");
 const moment = require("moment-timezone");
 const currentTime = moment().tz("Asia/Kolkata");
 const { Op } = require("sequelize");
+const { stockCategory } = require("../../utils/alltrads.json");
 module.exports = function (TdDerivatives) {
   var getIntradayData = app.datasources.getIntradayData;
   var getOptionExpiry = app.datasources.getOptionExpiry;
@@ -356,30 +357,30 @@ module.exports = function (TdDerivatives) {
     try {
       const gettime = getTimeCurrent();
       const response = await getProductList();
-  
+
       const listType = response?.PRODUCTS || [];
       if (_.isEmpty(listType)) return;
-  
+
       for (const type of listType.slice(16)) {
         const [fiveDay, twoWeek, fiveWeek] = await Promise.all([
           getHistoryDataFile(type, 1),
           getHistoryDataFile(type, 2),
           getHistoryDataFile(type, 4)
         ]);
-  
+
         const currentdata = await getCurrentIntraday(type);
         const strickPrice = currentdata.AVERAGETRADEDPRICE;
-  
+
         try {
           const expirydate = await getOptionExpiryDate(type);
           const responseOption = await getOptionDataToday(type, expirydate);
-  
+
           const { callArr, putArr } = processOptions(responseOption);
           const { index, nearestValue: strike } = findClosestItem(callArr, strickPrice, "value");
-  
+
           if (index !== -1) {
             const { putTotal, callTotal } = calculateOpenInterest(callArr, putArr, index);
-  
+            const StockType = stockData.find(item => item.symbol === type);
             const datatoday = {
               ...currentdata,
               putTotal,
@@ -389,9 +390,10 @@ module.exports = function (TdDerivatives) {
               fiveDay,
               twoWeek,
               fiveWeek,
+              StockType,
               timeUpdate: moment().unix(),
             };
-  
+
             if (!_.isEmpty(datatoday)) await saveData(datatoday);
           }
         } catch (error) {
@@ -446,7 +448,7 @@ module.exports = function (TdDerivatives) {
     }
     return { callArr, putArr };
   }
-  
+
   function calculateOpenInterest(callArr, putArr, index) {
     let putTotal = 0, callTotal = 0;
     for (let i = Math.max(index - 5, 0); i < Math.min(index + 5, putArr.length, callArr.length); i++) {
@@ -455,7 +457,7 @@ module.exports = function (TdDerivatives) {
     }
     return { putTotal, callTotal };
   }
-  
+
   async function saveData(datatoday) {
     return new Promise((resolve, reject) => {
       TdDerivatives.create(datatoday, (err) => {
@@ -467,7 +469,7 @@ module.exports = function (TdDerivatives) {
       });
     });
   }
-  
+
   async function getHistoryDataFile(type, week) {
     return new Promise((resolve, reject) => {
       getIntradayData.GetHistory('WEEK', `${type}-I`, 1, week, (err, response) => {
@@ -476,7 +478,7 @@ module.exports = function (TdDerivatives) {
       });
     });
   }
-  
+
   function getTimeCurrent() {
     let date_ob = new Date();
     // Add 5 hours and 30 minutes

@@ -1,0 +1,730 @@
+[
+    {
+        "category": "SENSEX",
+        "symbol": "ASIANPAINT"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "AXISBANK"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "BAJAJ-AUTO"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "BAJAJFINSV"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "BAJFINANCE"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "BHARTIARTL"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "DRREDDY"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "HCLTECH"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "HDFCBANK"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "HDFCLIFE"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "ICICIBANK"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "INDUSINDBK"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "INFY"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "ITC"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "KOTAKBANK"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "LT"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "M&M"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "MARUTI"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "NESTLEIND"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "NTPC"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "POWERGRID"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "RELIANCE"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "SBIN"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "SUNPHARMA"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "TATACONSUM"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "TATAMOTORS"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "TATASTEEL"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "TCS"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "TECHM"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "TITAN"
+    },
+    {
+        "category": "SENSEX",
+        "symbol": "ULTRACEMCO"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "ANGELONE"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "APLAPOLLO"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "AUROPHARMA"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "BALKRISIND"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "CANBK"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "COFORGE"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "CROMPTON"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "DALBHARAT"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "DEEPAKNTR"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "DIXON"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "ESCORTS"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "FEDERALBNK"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "GLENMARK"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "GODREJPROP"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "HAL"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "HAVELLS"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "IDFCFIRSTB"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "INDIANB"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "INDIGO"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "JINDALSTEL"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "JSWENERGY"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "LUPIN"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "MCX"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "MOTHERSON"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "MPHASIS"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "MUTHOOTFIN"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "OBEROIRLTY"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "PIIND"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "PNB"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "POLYCAB"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "PRESTIGE"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "RBLBANK"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "SHRIRAMFIN"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "TIINDIA"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "TRENT"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "TVSMOTOR"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "VOLTAS"
+    },
+    {
+        "category": "MIDCAP",
+        "symbol": "ZOMATO"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "ABCAPITAL"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "BAJAJFINSV"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "BAJFINANCE"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "CHOLAFIN"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "HDFCAMC"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "HDFCLIFE"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "ICICIGI"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "ICICIPRULI"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "LICHSGFIN"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "LICI"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "M&MFIN"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "MANAPPURAM"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "MUTHOOTFIN"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "SBICARD"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "SBILIFE"
+    },
+    {
+        "category": "FINNIFTY",
+        "symbol": "SHRIRAMFIN"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "AXISBANK"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "BANDHANBNK"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "BANKBARODA"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "BANKINDIA"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "CANBK"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "FEDERALBNK"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "HDFCBANK"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "ICICIBANK"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "IDFCFIRSTB"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "INDIANB"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "INDUSINDBK"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "KOTAKBANK"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "PNB"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "RBLBANK"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "SBIN"
+    },
+    {
+        "category": "BANKNIFTY",
+        "symbol": "UNIONBANK"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "AARTIIND"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ABB"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ABCAPITAL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ABFRL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ACC"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ADANIENSOL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ADANIENT"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ADANIGREEN"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ADANIPORTS"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ALKEM"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "AMBUJACEM"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ANGELONE"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "APLAPOLLO"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "APOLLOHOSP"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "APOLLOTYRE"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ASHOKLEY"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ASIANPAINT"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ASTRAL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ATGL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "AUROPHARMA"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BAJAJ-AUTO"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BAJAJFINSV"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BAJFINANCE"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BALKRISIND"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BEL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BERGEPAINT"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BHARATFORG"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BHARTIARTL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BHEL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BIOCON"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BOSCHLTD"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BPCL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BRITANNIA"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BSE"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "BSOFT"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CAMS"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CDSL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CESC"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CGPOWER"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CHAMBLFERT"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CHOLAFIN"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CIPLA"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "COALINDIA"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "COFORGE"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "COLPAL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CONCOR"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CROMPTON"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CUMMINSIND"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "CYIENT"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "DABUR"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "DALBHARAT"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "DEEPAKNTR"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "DELHIVERY"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "DIVISLAB"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "DIXON"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "DLF"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "DMART"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "DRREDDY"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "EICHERMOT"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "ESCORTS"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "EXIDEIND"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "GAIL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "GLENMARK"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "GMRAIRPORT"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "GODREJCP"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "GODREJPROP"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "GRANULES"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "GRASIM"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HAL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HAVELLS"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HCLTECH"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HDFCAMC"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HDFCBANK"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HDFCLIFE"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HEROMOTOCO"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HFCL"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HINDALCO"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HINDCOPPER"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HINDPETRO"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HINDUNILVR"
+    },
+    {
+        "category": "NIFTY",
+        "symbol": "HUDCO"
+    }
+]
