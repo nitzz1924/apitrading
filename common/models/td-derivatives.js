@@ -815,9 +815,9 @@ module.exports = function (TdDerivatives) {
   };
   TdDerivatives.getHistoryData = (periodicity, type, max, period, callback) => {
     getIntradayData.GetHistory(
-      'WEEK',
+      periodicity,
       `${type}-I`,
-      1,
+      max,
       period,
       (err, response) => {
         if (_.isEmpty(response)) {
