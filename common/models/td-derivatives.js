@@ -39,7 +39,7 @@ module.exports = function (TdDerivatives) {
         });
       }
     });
-  };
+  }
   TdDerivatives.productexpirydate = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetExpiryDates/?accessKey=${configt.stock.key}&exchange=NFO&product=${type}`;
     request(currenturl, function (error, response, body) {
@@ -354,131 +354,125 @@ module.exports = function (TdDerivatives) {
       });
   };
   cron.schedule(scheduletwo, async () => {
-    try {
-      const gettime = getTimeCurrent();
-      const response = await getProductList();
+    const gettime = getTimeCurrent();
+    getIntradayData.getProductList((err, response) => {
+      if (!_.isEmpty(response)) {
+        const listType = response.PRODUCTS;
+        if (!_.isEmpty(listType)) {
+          for (const type of listType.slice(16)) {
+            getIntradayData.getcurrentIntraday(type, (err, response) => {
+              if (_.isEmpty(response)) {
+                console.log("error 1");
+              } else {
+                const currentdata = response;
+                const strickPrice = response.AVERAGETRADEDPRICE;
+                // Wrap the whole operation in a Promise to handle the asynchronous calls
+                const processOptionData = async () => {
+                  try {
+                    const responsedate = await new Promise(
+                      (resolve, reject) => {
+                        getOptionExpiry.getOptionExpiryDates(
+                          type,
+                          (err, responsedate) => {
+                            if (_.isEmpty(responsedate)) {
+                              reject("Data not found");
+                            } else {
+                              resolve(responsedate);
+                            }
+                          }
+                        );
+                      }
+                    );
+                    const expirydate = responsedate.EXPIRYDATES[0];
+                    const responseOption = await new Promise(
+                      (resolve, reject) => {
+                        getOptionData.getOptionDataToday(
+                          type,
+                          expirydate,
+                          (err, responseOption) => {
+                            if (_.isEmpty(responseOption)) {
+                              reject("Data not found");
+                            } else {
+                              resolve(responseOption);
+                            }
+                          }
+                        );
+                      }
+                    );
+                    const apiResult = responseOption;
+                    const putArr = [];
+                    const callArr = [];
+                    for (const result of apiResult) {
+                      const identi = result.INSTRUMENTIDENTIFIER.split("_");
+                      const value = parseInt(identi[4]);
+                      if (result.SERVERTIME > 0) {
+                        if (identi[3] === "CE") {
+                          callArr.push({
+                            ...result,
+                            value,
+                            optionType: identi[3],
+                            optionDate: identi[2],
+                          });
+                        } else if (identi[3] === "PE") {
+                          putArr.push({
+                            ...result,
+                            value,
+                            optionType: identi[3],
+                            optionDate: identi[2],
+                          });
+                        }
+                      }
+                    }
+                    const currentOptionStrike = strickPrice;
+                    const result = findClosestItem(
+                      callArr,
+                      currentOptionStrike,
+                      "value"
+                    );
+                    const index = result.index;
+                    const strike = result.nearestValue;
+                    if (index !== -1) {
+                      let putTotal = 0;
+                      let callTotal = 0;
+                      for (let i = index - 5; i < index + 5; i++) {
+                        putTotal += putArr[i].OPENINTERESTCHANGE;
+                        callTotal += callArr[i].OPENINTERESTCHANGE;
+                      }
 
-      const listType = response?.PRODUCTS || [];
-      if (_.isEmpty(listType)) return;
-
-      for (const type of listType.slice(16)) {
-        const [fiveDay, twoWeek, fiveWeek] = await Promise.all([
-          getHistoryDataFile(type, 1),
-          getHistoryDataFile(type, 2),
-          getHistoryDataFile(type, 4)
-        ]);
-
-        const currentdata = await getCurrentIntraday(type);
-        const strickPrice = currentdata.AVERAGETRADEDPRICE;
-
-        try {
-          const expirydate = await getOptionExpiryDate(type);
-          const responseOption = await getOptionDataToday(type, expirydate);
-
-          const { callArr, putArr } = processOptions(responseOption);
-          const { index, nearestValue: strike } = findClosestItem(callArr, strickPrice, "value");
-
-          if (index !== -1) {
-            const { putTotal, callTotal } = calculateOpenInterest(callArr, putArr, index);
-            const StockType = stockData.find(item => item.symbol === type);
-            const datatoday = {
-              ...currentdata,
-              putTotal,
-              callTotal,
-              strike,
-              time: gettime,
-              fiveDay,
-              twoWeek,
-              fiveWeek,
-              StockType,
-              timeUpdate: moment().unix(),
-            };
-
-            if (!_.isEmpty(datatoday)) await saveData(datatoday);
+                      const datatoday = {
+                        ...currentdata,
+                        putTotal,
+                        callTotal,
+                        strike,
+                        time: gettime,
+                        timeUpdate: moment(currentTime).unix(),
+                      };
+                      if (!_.isEmpty(datatoday)) {
+                        await new Promise((resolve, reject) => {
+                          TdDerivatives.create(datatoday, (err, data) => {
+                            if (err) {
+                              console.error(err);
+                              reject(err);
+                            } else {
+                              console.log("Data updated successfully.");
+                              resolve();
+                            }
+                          });
+                        });
+                      }
+                    }
+                  } catch (error) {
+                    console.error("Error:", error);
+                  }
+                };
+                processOptionData();
+              }
+            });
           }
-        } catch (error) {
-          console.error("Processing error:", error);
         }
       }
-    } catch (error) {
-      console.error("Cron job error:", error);
-    }
+    });
   });
-  async function getProductList() {
-    return new Promise((resolve, reject) => {
-      getIntradayData.getProductList((err, res) => {
-        if (err || _.isEmpty(res)) reject("Product list fetch error");
-        else resolve(res);
-      });
-    });
-  }
-  async function getCurrentIntraday(type) {
-    return new Promise((resolve, reject) => {
-      getIntradayData.getcurrentIntraday(type, (err, res) => {
-        if (err || _.isEmpty(res)) reject("Error fetching current intraday data");
-        else resolve(res);
-      });
-    });
-  }
-  async function getOptionExpiryDate(type) {
-    return new Promise((resolve, reject) => {
-      getOptionExpiry.getOptionExpiryDates(type, (err, res) => {
-        if (err || _.isEmpty(res)) reject("Error fetching option expiry dates");
-        else resolve(res.EXPIRYDATES[0]);
-      });
-    });
-  }
-  async function getOptionDataToday(type, expirydate) {
-    return new Promise((resolve, reject) => {
-      getOptionData.getOptionDataToday(type, expirydate, (err, res) => {
-        if (err || _.isEmpty(res)) reject("Error fetching option data");
-        else resolve(res);
-      });
-    });
-  }
-  function processOptions(responseOption) {
-    const callArr = [], putArr = [];
-    for (const result of responseOption) {
-      const identi = result.INSTRUMENTIDENTIFIER.split("_");
-      const value = parseInt(identi[4]);
-      if (result.SERVERTIME > 0) {
-        if (identi[3] === "CE") callArr.push({ ...result, value, optionType: identi[3], optionDate: identi[2] });
-        else if (identi[3] === "PE") putArr.push({ ...result, value, optionType: identi[3], optionDate: identi[2] });
-      }
-    }
-    return { callArr, putArr };
-  }
-
-  function calculateOpenInterest(callArr, putArr, index) {
-    let putTotal = 0, callTotal = 0;
-    for (let i = Math.max(index - 5, 0); i < Math.min(index + 5, putArr.length, callArr.length); i++) {
-      putTotal += putArr[i]?.OPENINTERESTCHANGE || 0;
-      callTotal += callArr[i]?.OPENINTERESTCHANGE || 0;
-    }
-    return { putTotal, callTotal };
-  }
-
-  async function saveData(datatoday) {
-    return new Promise((resolve, reject) => {
-      TdDerivatives.create(datatoday, (err) => {
-        if (err) reject(err);
-        else {
-          console.log("Data updated successfully.");
-          resolve();
-        }
-      });
-    });
-  }
-
-  async function getHistoryDataFile(type, week) {
-    return new Promise((resolve, reject) => {
-      getIntradayData.GetHistory('WEEK', `${type}-I`, 1, week, (err, response) => {
-        if (err || _.isEmpty(response)) reject("Error fetching history data");
-        else resolve(response.OHLC[0]);
-      });
-    });
-  }
-
   function getTimeCurrent() {
     let date_ob = new Date();
     // Add 5 hours and 30 minutes
@@ -814,12 +808,12 @@ module.exports = function (TdDerivatives) {
       'WEEK',
       `${type}-I`,
       1,
-      week,
+      period,
       (err, response) => {
         if (_.isEmpty(response)) {
           console.log("error 1");
         } else {
-          callback(null, { list: response.OHLC });
+          callback(null, response.OHLC);
         }
       }
     );
@@ -883,4 +877,123 @@ module.exports = function (TdDerivatives) {
       });
     }
   };
+  // TdDerivatives.dayIntradayStock = (callback) => {
+  //   getIntradayData.getProductList((err, response) => {
+  //     let intraday = [];
+  //     let days = [2, 5, 10, 20, 50];
+  //     if (!_.isEmpty(response)) {
+  //       const listType = response.PRODUCTS;
+  //       const promises = listType.slice(18).map(type =>
+  //         new Promise((resolve, reject) => {
+  //           getIntradayData.getcurrentIntraday(type, (err, responseIntraday) => {
+  //             if (err || _.isEmpty(responseIntraday)) {
+  //               console.error("Error fetching intraday data for", type, err);
+  //               reject(err);
+  //             } else {
+  //               console.log("Data updated successfully for", type);
+  //               const historyPromises = days.map(day =>
+  //                 new Promise((resolve, reject) => {
+  //                   getIntradayData.GetHistory(
+  //                     'DAY',
+  //                     `${type}-I`,
+  //                     1,
+  //                     day,
+  //                     (err, response) => {
+  //                       if (_.isEmpty(response)) {
+  //                         console.log("error 1");
+  //                         resolve(); // Resolve with undefined to maintain order
+  //                       } else {
+  //                         responseIntraday[`day${day}`] = response.OHLC[0];
+  //                       }
+  //                     }
+  //                   );
+  //                 })
+  //               );
+  //               Promise.allSettled(historyPromises).then(results => {
+  //                 intraday = results.filter(p => p.status === "fulfilled").map(p => p.value);
+  //                 resolve(responseIntraday);
+  //               }).catch(error => {
+  //                 console.error("Error processing intraday data", error);
+  //                 resolve(responseIntraday);
+  //               });
+  //             }
+  //           });
+  //         })
+  //       );
+  //       Promise.allSettled(promises).then(results => {
+  //         intraday = results.filter(p => p.status === "fulfilled").map(p => p.value);
+  //         callback(null, intraday);
+  //       }).catch(error => {
+  //         console.error("Error processing intraday data", error);
+  //         callback(error, []);
+  //       });
+  //     } else {
+  //       callback(null, intraday);
+  //     }
+  //   });
+  // };
+
+
+  TdDerivatives.dayIntradayStock = (callback) => {
+    getIntradayData.getProductList((err, response) => {
+      let intraday = [];
+      let days = [2, 5, 10, 20, 50];
+      if (!_.isEmpty(response)) {
+        const listType = response.PRODUCTS;
+        const promises = listType.slice(18).map(type =>
+          new Promise((resolve, reject) => {
+            getIntradayData.getcurrentIntraday(type, (err, responseIntraday) => {
+              if (err || _.isEmpty(responseIntraday)) {
+                console.error("Error fetching intraday data for", type, err);
+                reject(err);
+              } else {
+                console.log("Data updated successfully for", type);
+                let historyResults = {};
+                let historyPromises = days.map(day =>
+                  new Promise((resolve, reject) => {
+                    setTimeout(() => { // Adding delay to prevent API overload
+                      getIntradayData.GetHistory(
+                        'DAY',
+                        `${type}-I`,
+                        1,
+                        day,
+                        (err, response) => {
+                          if (_.isEmpty(response)) {
+                            console.log("Error fetching history for", day);
+                            resolve(null);
+                          } else {
+                            historyResults[`day${day}`] = response.OHLC[0];
+                            resolve();
+                          }
+                        }
+                      );
+                    }, 200); // Adjust delay as needed
+                  })
+                );
+                
+                Promise.all(historyPromises).then(() => {
+                  Object.assign(responseIntraday, historyResults);
+                  resolve(responseIntraday);
+                }).catch(error => {
+                  console.error("Error processing history data", error);
+                  resolve(responseIntraday);
+                });
+              }
+            });
+          })
+        );
+        
+        Promise.allSettled(promises).then(results => {
+          intraday = results.filter(p => p.status === "fulfilled").map(p => p.value);
+          callback(null, intraday);
+        }).catch(error => {
+          console.error("Error processing intraday data", error);
+          callback(error, []);
+        });
+      } else {
+        callback(null, intraday);
+      }
+    });
+  };
+  
 };

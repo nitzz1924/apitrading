@@ -294,6 +294,22 @@
           "verb": "get"
         }
       ]
+    },
+    "dayIntradayStock": {
+      "accepts": [
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/dayIntradayStock",
+          "verb": "get"
+        }
+      ]
     }
   }
 }
