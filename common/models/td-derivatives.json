@@ -310,6 +310,22 @@
           "verb": "get"
         }
       ]
+    },
+    "oldDatadelete": {
+      "accepts": [
+      ],
+      "returns": {
+        "type": "object",
+        "arg": "response",
+        "root": true
+      },
+      "description": "",
+      "http": [
+        {
+          "path": "/oldDatadelete",
+          "verb": "get"
+        }
+      ]
     }
   }
 }

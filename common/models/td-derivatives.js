@@ -12,8 +12,8 @@ module.exports = function (TdDerivatives) {
   var getIntradayData = app.datasources.getIntradayData;
   var getOptionExpiry = app.datasources.getOptionExpiry;
   var getOptionData = app.datasources.getOptionData;
-  //var schedulew = "*/5 4-11 * * 1-5";
-  var scheduletwo = "*/5 10-15 * * 1-5";
+  var schedulew = "0 0 * * *";
+  var scheduletwo = "*/2 10-15 * * 1-5";
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
     request(currenturl, function (error, response, body) {
@@ -126,7 +126,6 @@ module.exports = function (TdDerivatives) {
       }
     });
   };
-  // Define a function to find the closest item in an array
   function findClosestItem(arr, value, key) {
     let closest = null;
     let index = -1;
@@ -353,6 +352,17 @@ module.exports = function (TdDerivatives) {
         }
       });
   };
+  cron.schedule(scheduletwo, async () => {
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    TdDerivatives.destroyAll({ createdAt: { lt: threeDaysAgo } }, (err, info) => {
+      if (err) {
+        callback(null, "Error deleting old records: " + err.message);
+      } else {
+        callback(null, `Old records deleted successfully. Deleted count: ${info.count}`);
+      }
+    });
+  });
   cron.schedule(scheduletwo, async () => {
     const gettime = getTimeCurrent();
     getIntradayData.getProductList((err, response) => {
@@ -877,63 +887,6 @@ module.exports = function (TdDerivatives) {
       });
     }
   };
-  // TdDerivatives.dayIntradayStock = (callback) => {
-  //   getIntradayData.getProductList((err, response) => {
-  //     let intraday = [];
-  //     let days = [2, 5, 10, 20, 50];
-  //     if (!_.isEmpty(response)) {
-  //       const listType = response.PRODUCTS;
-  //       const promises = listType.slice(18).map(type =>
-  //         new Promise((resolve, reject) => {
-  //           getIntradayData.getcurrentIntraday(type, (err, responseIntraday) => {
-  //             if (err || _.isEmpty(responseIntraday)) {
-  //               console.error("Error fetching intraday data for", type, err);
-  //               reject(err);
-  //             } else {
-  //               console.log("Data updated successfully for", type);
-  //               const historyPromises = days.map(day =>
-  //                 new Promise((resolve, reject) => {
-  //                   getIntradayData.GetHistory(
-  //                     'DAY',
-  //                     `${type}-I`,
-  //                     1,
-  //                     day,
-  //                     (err, response) => {
-  //                       if (_.isEmpty(response)) {
-  //                         console.log("error 1");
-  //                         resolve(); // Resolve with undefined to maintain order
-  //                       } else {
-  //                         responseIntraday[`day${day}`] = response.OHLC[0];
-  //                       }
-  //                     }
-  //                   );
-  //                 })
-  //               );
-  //               Promise.allSettled(historyPromises).then(results => {
-  //                 intraday = results.filter(p => p.status === "fulfilled").map(p => p.value);
-  //                 resolve(responseIntraday);
-  //               }).catch(error => {
-  //                 console.error("Error processing intraday data", error);
-  //                 resolve(responseIntraday);
-  //               });
-  //             }
-  //           });
-  //         })
-  //       );
-  //       Promise.allSettled(promises).then(results => {
-  //         intraday = results.filter(p => p.status === "fulfilled").map(p => p.value);
-  //         callback(null, intraday);
-  //       }).catch(error => {
-  //         console.error("Error processing intraday data", error);
-  //         callback(error, []);
-  //       });
-  //     } else {
-  //       callback(null, intraday);
-  //     }
-  //   });
-  // };
-
-
   TdDerivatives.dayIntradayStock = (callback) => {
     getIntradayData.getProductList((err, response) => {
       let intraday = [];
@@ -970,7 +923,7 @@ module.exports = function (TdDerivatives) {
                     }, 200); // Adjust delay as needed
                   })
                 );
-                
+
                 Promise.all(historyPromises).then(() => {
                   Object.assign(responseIntraday, historyResults);
                   resolve(responseIntraday);
@@ -982,7 +935,7 @@ module.exports = function (TdDerivatives) {
             });
           })
         );
-        
+
         Promise.allSettled(promises).then(results => {
           intraday = results.filter(p => p.status === "fulfilled").map(p => p.value);
           callback(null, intraday);
@@ -995,5 +948,15 @@ module.exports = function (TdDerivatives) {
       }
     });
   };
-  
+  TdDerivatives.oldDatadelete = (callback) => {
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate()-3);
+    TdDerivatives.destroyAll({ createdAt: { lt: threeDaysAgo } }, (err, info) => {
+      if (err) {
+        callback(null, "Error deleting old records: " + err.message);
+      } else {
+        callback(null, `Old records deleted successfully. Deleted count: ${info.count}`);
+      }
+    });
+  }
 };
