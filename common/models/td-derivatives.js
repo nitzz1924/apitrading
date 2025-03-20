@@ -935,10 +935,12 @@ module.exports = function (TdDerivatives) {
             });
           })
         );
-
         Promise.allSettled(promises).then(results => {
           intraday = results.filter(p => p.status === "fulfilled").map(p => p.value);
-          callback(null, intraday);
+          const filteredData = intraday.filter(symbol =>
+            symbol.day5 && symbol.day10 && symbol.day20 && symbol.day50
+          );
+          callback(null, filteredData);
         }).catch(error => {
           console.error("Error processing intraday data", error);
           callback(error, []);
