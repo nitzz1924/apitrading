@@ -12,7 +12,7 @@ module.exports = function (TdDerivatives) {
   var getIntradayData = app.datasources.getIntradayData;
   var getOptionExpiry = app.datasources.getOptionExpiry;
   var getOptionData = app.datasources.getOptionData;
-  var schedulew = "0 0 * * *";
+  var schedulew = "30 18 * * *";
   var scheduletwo = "*/2 10-15 * * 1-5";
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
@@ -352,7 +352,7 @@ module.exports = function (TdDerivatives) {
         }
       });
   };
-  cron.schedule(scheduletwo, async () => {
+  cron.schedule(schedulew, async () => {
     const threeDaysAgo = new Date();
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
     TdDerivatives.destroyAll({ createdAt: { lt: threeDaysAgo } }, (err, info) => {
@@ -948,15 +948,4 @@ module.exports = function (TdDerivatives) {
       }
     });
   };
-  TdDerivatives.oldDatadelete = (callback) => {
-    const threeDaysAgo = new Date();
-    threeDaysAgo.setDate(threeDaysAgo.getDate()-3);
-    TdDerivatives.destroyAll({ createdAt: { lt: threeDaysAgo } }, (err, info) => {
-      if (err) {
-        callback(null, "Error deleting old records: " + err.message);
-      } else {
-        callback(null, `Old records deleted successfully. Deleted count: ${info.count}`);
-      }
-    });
-  }
 };
