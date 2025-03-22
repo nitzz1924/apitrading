@@ -1,0 +1,23 @@
+{
+  "name": "TdStockData",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now",
+      "data": "2023-11-02T06:39:09.101Z"
+    },
+    "timeUpdate": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {
+  }
+}

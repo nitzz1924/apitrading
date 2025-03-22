@@ -99,5 +99,9 @@
   "TdNotification": {
     "dataSource": "mongoDB",
     "public": true
+  },
+  "TdStockData": {
+    "dataSource": "mongoDB",
+    "public": true
   }
 }
