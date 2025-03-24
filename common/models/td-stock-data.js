@@ -8,9 +8,9 @@ module.exports = function (TdStockData) {
   cron.schedule(scheduletwo, async () => {
     TdStockData.destroyAll({}, (err, info) => {
       if (err) {
-        callback(null, "Error deleting old records: " + err.message);
+         console.log("Error deleting old records: " + err.message);
       } else {
-        callback(null, `Old records deleted successfully. Deleted count: ${info.count}`);
+         console.log(`Old records deleted successfully. Deleted count: ${info.count}`);
       }
     });
     getIntradayData.GetProductListOwn((err, response) => {
@@ -60,7 +60,6 @@ module.exports = function (TdStockData) {
           TdStockData.create(filteredData, (err, data) => {
             if (err) {
               console.error("Error inserting data:", err);
-              return callback(null, err);
             }
             console.log("Data inserted successfully.");
           });
