@@ -15,13 +15,13 @@ module.exports = function (TdStockData) {
     });
     getIntradayData.GetProductListOwn((err, response) => {
       if (_.isEmpty(response)) {
-        return callback(null, {
+        console.log({
           result: { status: "0", message: "Data not found", list: [] },
         });
       }
       const listType = response[0].List;
       if (_.isEmpty(listType)) {
-        return callback(null, {
+        console.log({
           result: { status: "0", message: "No product list available", list: [] },
         });
       }
@@ -53,7 +53,7 @@ module.exports = function (TdStockData) {
             .map(p => p.value);
           if (_.isEmpty(intraday)) {
             console.log("No valid intraday data to insert.");
-            return callback(null, { status: "0", message: "No valid data to insert." });
+
           }
           const filteredData = intraday.filter(symbol => symbol.day50.length != 0);
           // Insert filtered data into TdStockData
@@ -62,12 +62,11 @@ module.exports = function (TdStockData) {
               console.error("Error inserting data:", err);
               return callback(null, err);
             }
-            callback(null, "Data updated successfully.");
+            console.log("Data inserted successfully.");
           });
         })
         .catch(error => {
           console.error("Error processing intraday data", error);
-          callback(error, []);
         });
     });
   });
@@ -121,7 +120,6 @@ module.exports = function (TdStockData) {
               console.error("Error inserting data:", err);
               return callback(null, err);
             }
-            callback(null, "Data updated successfully.");
           });
         })
         .catch(error => {

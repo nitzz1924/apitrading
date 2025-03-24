@@ -357,9 +357,9 @@ module.exports = function (TdDerivatives) {
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 2);
     TdDerivatives.destroyAll({ createdAt: { lt: threeDaysAgo } }, (err, info) => {
       if (err) {
-        callback(null, "Error deleting old records: " + err.message);
+        console.log("Error deleting old records: " + err.message);
       } else {
-        callback(null, `Old records deleted successfully. Deleted count: ${info.count}`);
+        console.log(`Old records deleted successfully. Deleted count: ${info.count}`);
       }
     });
   });
@@ -367,9 +367,7 @@ module.exports = function (TdDerivatives) {
     const gettime = getTimeCurrent();
     getIntradayData.GetProductListOwn((err, response) => {
       if (_.isEmpty(response)) {
-        return callback(null, {
-          result: { status: "0", message: "Data not found", list: [] },
-        });
+       console.log( { status: "0", message: "Data not found", list: [] });
       }
       const listType = response[0].List;
       if (!_.isEmpty(listType)) {
