@@ -5,14 +5,19 @@ const cron = require("node-cron");
 module.exports = function (TdStockData) {
   var getIntradayData = app.datasources.getIntradayData;
   var scheduletwo = "*/2 10-15 * * 1-5";
-  cron.schedule(scheduletwo, async () => {
-    TdStockData.destroyAll({}, (err, info) => {
+  var schedulew = "30 18 * * *";
+  cron.schedule(schedulew, async () => {
+    const threeDaysAgo = new Date();
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 1);
+    TdStockData.destroyAll({ createdAt: { lt: threeDaysAgo } }, (err, info) => {
       if (err) {
-         console.log("Error deleting old records: " + err.message);
+        console.log("Error deleting old records: " + err.message);
       } else {
-         console.log(`Old records deleted successfully. Deleted count: ${info.count}`);
+        console.log(`Old records deleted successfully. Deleted count: ${info.count}`);
       }
     });
+  });
+  cron.schedule(scheduletwo, async () => {
     getIntradayData.GetProductListOwn((err, response) => {
       if (_.isEmpty(response)) {
         console.log({
