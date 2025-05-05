@@ -4,7 +4,7 @@
     "connector": "memory"
   },
   "mongoDB": {
-    "url": "mongodb://yuvmedia:yuvmedia%40123@13.127.224.201:27017/tradingdb?authSource=tradingdb",
+    "url": "mongodb://yuvmedia:yuvmedia%40123@65.0.131.114:27017/tradingdb?authSource=tradingdb",
     "name": "mongoDB",
     "useNewUrlParser": true,
     "connector": "mongodb",
