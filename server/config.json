@@ -24,7 +24,7 @@
   "debugPhoneNumber": "8104035107",
   "stock": {
     "name": "stock",
-    "OwnUrl": "http://13.201.81.3:3000/api/",
+    "OwnUrl": "http://52.66.151.124:3000/api/",
     "connector": "http://nimblerest.lisuns.com:4531",
     "provider": "globelapi",
     "key": "d017b486-b42b-4be7-aad7-48aa748970eb"
