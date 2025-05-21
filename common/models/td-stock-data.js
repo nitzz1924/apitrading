@@ -5,7 +5,7 @@ const cron = require("node-cron");
 
 module.exports = function (TdStockData) {
   var getIntradayData = app.datasources.getIntradayData;
-  var schedulew = "30 3 * * *";
+  var schedulew = "0 8 * * 1-5";
   var scheduletwo = "*/5 10-15 * * 1-5";
   cron.schedule(schedulew, async () => {
     const threeDaysAgo = new Date();
