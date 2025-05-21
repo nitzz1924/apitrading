@@ -114,7 +114,7 @@
       {
         "template": {
           "method": "GET",
-          "url": "http://65.0.97.1:3000/api/TdProducts"
+          "url": "http://13.203.76.56:3000/api/TdProducts"
         },
         "functions": {
           "GetProductListOwn": []
