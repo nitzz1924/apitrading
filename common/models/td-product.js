@@ -13,7 +13,7 @@ module.exports = function (TdProduct) {
           await new Promise((resolve, reject) => {
             TdProduct.destroyAll({}, (err, info) => {
               if (err) {
-                callback(null, "Error deleting old records: " + err.message);
+                console.log(null, "Error deleting old records: " + err.message);
               } else {
                 TdProduct.create(
                   { List: response.PRODUCTS.slice(18) },
@@ -22,7 +22,7 @@ module.exports = function (TdProduct) {
                       console.error(err);
                       reject(err);
                     } else {
-                      callback(null, {
+                      console.log(null, {
                         result: "Data updated successfully.and old data deleted",
                       });
                       resolve();

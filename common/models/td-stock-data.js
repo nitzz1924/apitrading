@@ -26,7 +26,7 @@ module.exports = function (TdStockData) {
         });
       }
       const listType = [];
-      if (response[0].length<=0) {
+      if (!Array.isArray(response) || !response[0]?.length) {
         getIntradayData.getProductList(async (err, response) => {
           if (!_.isEmpty(response)) {
             if (!_.isEmpty(response)) {
