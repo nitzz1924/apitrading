@@ -110,15 +110,6 @@
             "time"
           ]
         }
-      },
-      {
-        "template": {
-          "method": "GET",
-          "url": "http://13.232.97.89:3000/api/TdProducts"
-        },
-        "functions": {
-          "GetProductListOwn": []
-        }
       }
     ]
   },
