@@ -12,7 +12,7 @@ module.exports = function (TdDerivatives) {
   var getOptionExpiry = app.datasources.getOptionExpiry;
   var getOptionData = app.datasources.getOptionData;
   var schedulew = "0 8 * * 1-5";
-  var scheduletwo = "*/5 10-15 * * 1-5";
+  var scheduletwo = "*/5 * 9-16 * 1-5"; // Every 5 minutes on weekdays
   TdDerivatives.strikeprice = (type, callback) => {
     const currenturl = `${configt.stock.connector}/GetLastQuote/?accessKey=${configt.stock.key}&exchange=NFO&instrumentIdentifier=${type}-I`;
     request(currenturl, function (error, response, body) {
@@ -345,15 +345,26 @@ module.exports = function (TdDerivatives) {
       }
     });
   });
-  cron.schedule(scheduletwo, async () => {
-    const gettime = getTimeCurrent();
-    const listType = [];
-    getIntradayData.getProductList(async (err, response) => {
-      if (!_.isEmpty(response)) {
-        listType.push(...response.PRODUCTS.slice(18));
-      }
+  function getProductListAsync() {
+    return new Promise((resolve, reject) => {
+      getIntradayData.getProductList((err, response) => {
+        if (err) return reject(err);
+        if (!_.isEmpty(response)) {
+          resolve(response.PRODUCTS.slice(18));
+        } else {
+          resolve([]);
+        }
+      });
     });
-    if (!_.isEmpty(listType)) {
+  }
+  cron.schedule(scheduletwo, async () => {
+    console.log("Running cron job to fetch intraday data");
+    const gettime = getTimeCurrent();
+    try {
+      const listType = await getProductListAsync();
+      //console.log("Filtered Product List", listType);
+      // use listType here
+       if (!_.isEmpty(listType)) {
       for (const type of listType) {
         getIntradayData.getcurrentIntraday(type, (err, response) => {
           if (_.isEmpty(response)) {
@@ -465,6 +476,10 @@ module.exports = function (TdDerivatives) {
         });
       }
     }
+    } catch (err) {
+      console.error("Error fetching product list:", err);
+    }
+   
   });
   function getTimeCurrent() {
     let date_ob = new Date();
