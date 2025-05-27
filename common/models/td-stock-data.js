@@ -6,7 +6,19 @@ const cron = require("node-cron");
 module.exports = function (TdStockData) {
   var getIntradayData = app.datasources.getIntradayData;
   var schedulew = "0 8 * * 1-5";
-  var scheduletwo = "*/5 10-15 * * 1-5";
+  var scheduletwo = "*/5 4-11 * * 1-5";
+  function getProductListAsync() {
+    return new Promise((resolve, reject) => {
+      getIntradayData.getProductList((err, response) => {
+        if (err) return reject(err);
+        if (!_.isEmpty(response)) {
+          resolve(response.PRODUCTS.slice(18));
+        } else {
+          resolve([]);
+        }
+      });
+    });
+  }
   cron.schedule(schedulew, async () => {
     const threeDaysAgo = new Date();
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 1);
@@ -19,30 +31,8 @@ module.exports = function (TdStockData) {
     });
   });
   cron.schedule(scheduletwo, async () => {
-    getIntradayData.GetProductListOwn((err, response) => {
-      if (_.isEmpty(response)) {
-        console.log({
-          result: { status: "0", message: "Data not found", list: [] },
-        });
-      }
-      const listType = [];
-      if (!Array.isArray(response) || !response[0]?.length) {
-        getIntradayData.getProductList(async (err, response) => {
-          if (!_.isEmpty(response)) {
-            if (!_.isEmpty(response)) {
-              listType.push(...response.PRODUCTS.slice(18));
-            }
-          }
-        });
-      }
-      else {
-        listType.push(...response[0].List);
-      }
-      if (_.isEmpty(listType)) {
-        return ({
-          result: { status: "0", message: "No product list available", list: [] },
-        });
-      }
+    try {
+      const listType = await getProductListAsync();
       // Fetch intraday data for each product type
       const intradayPromises = listType.map(type => {
         return new Promise((resolve, reject) => {
@@ -85,16 +75,17 @@ module.exports = function (TdStockData) {
         .catch(error => {
           console.error("Error processing intraday data", error);
         });
-    });
+    }
+    catch (error) {
+      console.error("Error fetching product list:", error);
+      return;
+    }
+
+
+
   });
-  TdStockData.getTodayHistory = (callback) => {
-    getIntradayData.GetProductListOwn((err, response) => {
-      if (_.isEmpty(response)) {
-        return callback(null, {
-          result: { status: "0", message: "Data not found", list: [] },
-        });
-      }
-      const listType = response[0].List;
+  TdStockData.getTodayHistory =async (callback) => {
+     const listType = await getProductListAsync();
       if (_.isEmpty(listType)) {
         return callback(null, {
           result: { status: "0", message: "No product list available", list: [] },
@@ -143,6 +134,5 @@ module.exports = function (TdStockData) {
           console.error("Error processing intraday data", error);
           callback(error, []);
         });
-    });
   };
 };
