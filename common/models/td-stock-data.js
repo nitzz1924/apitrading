@@ -2,7 +2,8 @@
 const app = require("../../server/server");
 const _ = require("lodash");
 const cron = require("node-cron");
-
+const moment = require("moment-timezone");
+const currentTime = moment().tz("Asia/Kolkata");
 module.exports = function (TdStockData) {
   var getIntradayData = app.datasources.getIntradayData;
   var schedulew = "0 8 * * 1-5";
