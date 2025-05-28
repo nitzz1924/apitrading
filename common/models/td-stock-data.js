@@ -6,7 +6,7 @@ const cron = require("node-cron");
 module.exports = function (TdStockData) {
   var getIntradayData = app.datasources.getIntradayData;
   var schedulew = "0 8 * * 1-5";
-  var scheduletwo = "*/5 4-11 * * 1-5";
+  var scheduletwo = "*/5 9-16 * * 1-5";
   function getProductListAsync() {
     return new Promise((resolve, reject) => {
       getIntradayData.getProductList((err, response) => {
