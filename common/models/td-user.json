@@ -39,7 +39,7 @@
     "referrald": {
       "type": "string"
     },
-    "verificationCode": {
+    "otp": {
       "type": "string"
     },
     "codeCreatedAt": {
@@ -49,6 +49,15 @@
       "type": "string",
       "default": "I"
     },
+    "ipAddress": {
+      "type": "string"
+    },
+     "twoFaEnabled": {
+      "type": "boolean"
+    },
+    "profileImage": {
+      "type": "string"
+    },
     "expairyDate": {
       "type": "date"
     },
@@ -57,7 +66,7 @@
     },
     "status": {
       "type": "string",
-      "default": "I"
+      "default": "inactive"
     }
   },
   "validations": [],

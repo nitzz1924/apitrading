@@ -7,7 +7,7 @@ const currentTime = moment().tz("Asia/Kolkata");
 module.exports = function (TdStockData) {
   var getIntradayData = app.datasources.getIntradayData;
   var schedulew = "0 8 * * 1-5";
-  var scheduletwo = "*/5 9-16 * * 1-5";
+  var scheduletwo = "*/5 9-20 * * 1-5";
   function getProductListAsync() {
     return new Promise((resolve, reject) => {
       getIntradayData.getProductList((err, response) => {
