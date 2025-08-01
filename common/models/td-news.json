@@ -6,58 +6,50 @@
     "validateUpsert": true
   },
   "properties": {
+    "sourceId": {
+      "type": "string"
+    },
+    "sourceName": {
+      "type": "string"
+    },
+    "author": {
+      "type": "string"
+    },
     "title": {
       "type": "string",
       "required": true
     },
-    "type": {
-      "type": "string",
-      "required": true
+    "description": {
+      "type": "string"
     },
-    "body": {
+    "url": {
       "type": "string",
       "required": true
     },
     "urlToImage": {
-      "type": "string",
+      "type": "string"
+    },
+    "publishedAt": {
+      "type": "date",
       "required": true
     },
     "content": {
-      "type": "string",
-      "required": true
-    },
-    "videoUrl": {
       "type": "string"
     },
     "createdAt": {
       "type": "date",
       "defaultFn": "now"
     },
-    "updateAt": {
+    "updatedAt": {
       "type": "date",
       "defaultFn": "now"
     }
   },
   "validations": [],
-  "relations": {
-    "courseVideo": {
-      "type": "hasMany",
-      "model": "CourseVideo",
-      "foreignKey": "courseId",
-      "options": {
-        "nestRemoting": true
-      }
-    }
-  },
+  "relations": {},
   "acls": [
     {
       "accessType": "*",
-      "principalType": "ROLE",
-      "principalId": "$everyone",
-      "permission": "ALLOW"
-    },
-    {
-      "accessType": "READ",
       "principalType": "ROLE",
       "principalId": "$everyone",
       "permission": "ALLOW"
@@ -68,28 +60,5 @@
       "principalId": "$authenticated",
       "permission": "ALLOW"
     }
-  ],
-  "methods": {
-    "getNewsData": {
-      "accepts": [
-        {
-          "arg": "type",
-          "type": "string",
-          "required": true
-        }
-      ],
-      "returns": {
-        "type": "object",
-        "arg": "response",
-        "root": true
-      },
-      "description": "",
-      "http": [
-        {
-          "path": "/getNewsData",
-          "verb": "get"
-        }
-      ]
-    }
-  }
+  ]
 }

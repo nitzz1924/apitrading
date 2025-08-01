@@ -1,0 +1,84 @@
+{
+  "name": "OrderMangement",
+  "base": "PersistedModel",
+  "strict": "validate",
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "string",
+      "id": true,
+      "defaultFn": "guid"
+    },
+    "scalpinClientId": {
+      "type": "string",
+      "required": true
+    },
+    "correlationId": {
+      "type": "string",
+      "required": true
+    },
+    "transactionType": {
+      "type": "string",
+      "required": true
+    },
+    "exchangeSegment": {
+      "type": "string",
+      "required": true
+    },
+    "productType": {
+      "type": "string",
+      "required": true
+    },
+    "orderType": {
+      "type": "string",
+      "required": true
+    },
+    "validity": {
+      "type": "string",
+      "required": true
+    },
+    "securityId": {
+      "type": "string",
+      "required": true
+    },
+    "quantity": {
+      "type": "string",
+      "required": true
+    },
+    "disclosedQuantity": {
+      "type": "string",
+      "default": ""
+    },
+    "price": {
+      "type": "string",
+      "default": ""
+    },
+    "triggerPrice": {
+      "type": "string",
+      "default": ""
+    },
+    "afterMarketOrder": {
+      "type": "boolean",
+      "default": false
+    },
+    "amoTime": {
+      "type": "string",
+      "default": ""
+    },
+    "boProfitValue": {
+      "type": "string",
+      "default": ""
+    },
+    "boStopLossValue": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {},
+  "mixins": {}
+}

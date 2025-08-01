@@ -1,5 +1,5 @@
 {
-  "name": "TdNotification",
+  "name": "Notification",
   "base": "PersistedModel",
   "strict": "validate",
   "options": {
@@ -11,32 +11,60 @@
       "id": true,
       "defaultFn": "guid"
     },
-    "tsUserId": {
+    "userId": {
       "type": "string",
-      "default": null
+      "required": true,
+      "description": "ID of the user receiving the notification"
     },
-    "msgTitle": {
-      "type": "string"
+    "title": {
+      "type": "string",
+      "required": true,
+      "description": "Notification title"
     },
-    "msgText": {
-      "type": "string"
+    "message": {
+      "type": "string",
+      "required": true,
+      "description": "Notification message body"
     },
-    "images": {
-      "type": "string"
+    "imageUrl": {
+      "type": "string",
+      "description": "Optional image or icon for the notification"
     },
-    "language": {
-      "type": "string"
-    },
-    "date": {
-      "type": "date"
+    "type": {
+      "type": "string",
+      "default": "alert",
+      "description": "Type of notification (alert, trade-signal, news, promo, etc.)"
     },
     "status": {
       "type": "string",
-      "default": "U"
+      "default": "unread",
+      "description": "Notification status (unread, read)"
+    },
+    "isRead": {
+      "type": "boolean",
+      "default": false,
+      "description": "Quick boolean for checking read status"
+    },
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
+    },
+    "readAt": {
+      "type": "date",
+      "description": "Timestamp when notification was read"
+    },
+    "meta": {
+      "type": "object",
+      "description": "Extra metadata (like deep-link URL, trade ID, etc.)"
     }
   },
-  "validations": [],
-  "relations": {},
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "userId"
+    }
+  },
   "acls": [],
   "methods": {},
   "mixins": {}

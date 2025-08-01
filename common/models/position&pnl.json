@@ -1,0 +1,64 @@
+{
+    "name": "Position&PNL",
+    "base": "PersistedModel",
+    "strict": "validate",
+    "options": {
+        "validateUpsert": true
+    },
+    "properties": {
+        "id": {
+            "type": "string",
+            "id": true,
+            "defaultFn": "guid"
+        },
+        "scalpingClientId": {
+            "type": "string",
+            "required": true,
+            "description": "Unique client ID in Dhan platform"
+        },
+        "narration": {
+            "type": "string",
+            "description": "Transaction description"
+        },
+        "voucherDate": {
+            "type": "date",
+            "required": true,
+            "description": "Date of the transaction"
+        },
+        "exchange": {
+            "type": "string",
+            "description": "Stock exchange (e.g. NSE-CAPITAL, BSE, MCX)"
+        },
+        "voucherDesc": {
+            "type": "string",
+            "description": "Short description of the voucher"
+        },
+        "voucherNumber": {
+            "type": "string",
+            "description": "Unique voucher number for this transaction"
+        },
+        "debit": {
+            "type": "number",
+            "default": 0,
+            "description": "Amount debited from account"
+        },
+        "credit": {
+            "type": "number",
+            "default": 0,
+            "description": "Amount credited to account"
+        },
+        "runningBalance": {
+            "type": "number",
+            "description": "Account balance after this transaction"
+        },
+        "createdAt": {
+            "type": "date",
+            "defaultFn": "now"
+        }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {},
+    "mixins": {}
+}

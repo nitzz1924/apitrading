@@ -1,70 +1,119 @@
 {
-    "name": "TdCourse",
-    "base": "PersistedModel",
-    "idInjection": true,
-    "options": {
-      "validateUpsert": true
+  "name": "TdCourse",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "courseName": {
+      "type": "string",
+      "required": true
     },
-    "properties": {
-      "title": {
-        "type": "string",
-        "required": true
-      },
-      "type": {
-        "type": "string",
-        "required": true
-      },
-      "shortDetail": {
-        "type": "string",
-        "required": true
-      },
-      "coverImage": {
-        "type": "string",
-        "required": true
-      },
-      "pricing": {
-        "type": "number"
-      },
-      "createdAt": {
-        "type": "date",
-        "defaultFn": "now"
-      },
-      "updateAt": {
-        "type": "date",
-        "defaultFn": "now"
+    "subTitle": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"  
+    },
+    "coverImage": {
+      "type": "string"
+    },
+    "pricing": {
+      "type": "number",
+      "default": 0
+    },
+    "language": {
+      "type": "string",
+      "default": "English"
+    },
+    "duration": {
+      "type": "string",
+      "description": "Total course length (e.g. '5h 30m')"
+    },
+    "level": {
+      "type": "string",
+      "description": "Beginner, Intermediate, Advanced"
+    },
+    "instructorName": {
+      "type": "string"
+    },
+    "instructorProfileImage": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "default": 0
+    },
+    "totalRatings": {
+      "type": "number",
+      "default": 0
+    },
+    "enrollments": {
+      "type": "number",
+      "default": 0
+    },
+    "tags": {
+      "type": ["string"]
+    },
+    "isFeatured": {
+      "type": "boolean",
+      "default": false
+    },
+    "isPublished": {
+      "type": "boolean",
+      "default": false
+    },
+    "modules": {
+      "type": [
+        "object"
+      ],
+      "default": [],
+      "itemType": {
+        "week": "number",
+        "topic": "string",
+        "videos": [
+          {
+            "title": "string",
+            "duration": "string",
+            "videoUrl": "string",
+            "description": "string"
+          }
+        ]
       }
     },
-    "validations": [],
-    "relations": {
-        "courseVideo": {
-        "type": "hasMany",
-        "model": "CourseVideo",
-        "foreignKey": "courseId",
-        "options": {
-          "nestRemoting": true
-        }
-      }
+    "createdAt": {
+      "type": "date",
+      "defaultFn": "now"
     },
-    "acls": [
-      {
-        "accessType": "*",
-        "principalType": "ROLE",
-        "principalId": "$everyone",
-        "permission": "ALLOW"
-      },
-      {
-        "accessType": "READ",
-        "principalType": "ROLE",
-        "principalId": "$everyone",
-        "permission": "ALLOW"
-      },
-      {
-        "accessType": "*",
-        "principalType": "ROLE",
-        "principalId": "$authenticated",
-        "permission": "ALLOW"
+    "updatedAt": {
+      "type": "date",
+      "defaultFn": "now"
+    }
+  },
+  "relations": {
+    "courseCategories": {
+      "type": "hasMany",
+      "model": "CourseCategory",
+      "foreignKey": "courseId",
+      "options": {
+        "nestRemoting": true
       }
-    ],
-    "methods": {}
-  }
-  
+    }
+  },
+  "acls": [
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$authenticated",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {}
+}

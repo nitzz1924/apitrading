@@ -96,11 +96,23 @@
     "dataSource": "mongoDB",
     "public": true
   },
-  "TdNotification": {
+  "Notification": {
     "dataSource": "mongoDB",
     "public": true
   },
   "TdStockData": {
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "Position&PNL": {
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "Portfolio": {
+    "dataSource": "mongoDB",
+    "public": true
+  },
+  "OrderMangement": {
     "dataSource": "mongoDB",
     "public": true
   }
